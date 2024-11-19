@@ -1,0 +1,133 @@
+---
+title: "Stat 341 -- Homework 06"
+author: "Luca Seazzu"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: 
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r, setup, include = FALSE, message=FALSE}
+# load packages that are going to be used
+library(mosaic)      # this loads ggformula (for plotting), etc. too
+library(fastR2)      # some data sets
+library(pander)      # nicely formatted tables with pander()
+library(knitr)       # so you can use kable() for tables
+library(patchwork)   # for combining plots
+
+# data wrangling
+library(tidyverse)
+
+# several packages for bayesian stuff -- more may come later
+library(rethinking)  # related to text
+library(tidybayes)    
+library(bayesplot)
+library(CalvinBayes)
+
+
+
+# Some customization. You can alter or delete as desired (if you know what you are doing).
+
+theme_set(theme_bw())     # change theme for ggplot2/ggformula
+
+knitr::opts_chunk$set(
+  tidy = FALSE,     # display code as typed (rather than reformatted)
+  fig.width = 4,    # adjust this to make figures wider or narrower
+  fig.height = 2.5, # adjust this to make figures taller or shorrter
+  size = "small")   # slightly smaller font for code
+```
+
+
+<!-- A few math abbreviations -->
+
+\newcommand{\Prob}{\operatorname{Pr}}
+\newcommand{\Binom}{\operatorname{Binom}}
+\newcommand{\Unif}{\operatorname{Unif}}
+\newcommand{\Triangle}{\operatorname{Triangle}}
+\newcommand{\Norm}{\operatorname{Norm}}
+\newcommand{\Beta}{\operatorname{Beta}}
+\newcommand{\E}{\operatorname{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\SD}{\operatorname{SD}}
+
+<!-- Put your work below here.  Put text in text chunks, code in R chunks. -->
+
+```{r}
+data(foxes)
+foxes <- na.omit(foxes)
+glimpse(foxes)
+```
+
+Interested in the affect of avgfood, groupsize on weight, avgfood on groupsize, and area on avgfood.
+
+```{r}
+foxes <- foxes |>
+  mutate(avgfood_scaled = as.numeric(scale(avgfood))) |>
+  mutate(groupsize_scaled = as.numeric(scale(groupsize))) |>
+  mutate(area_scaled = as.numeric(scale(area))) |>
+  mutate(weight_scaled = as.numeric(scale(weight)))
+
+glimpse(foxes)
+```
+
+```{r}
+model_descrip <- alist(
+  # note variable name has to match actual data variable name
+  weight_scaled ~ dnorm(mu, sigma),
+  mu ~ beta0 + beta1 * avgfood_scaled + beta2 * groupsize_scaled + beta3 * area_scaled,
+  beta0 ~ dnorm(mean = 0, sd = 1),
+  beta1 ~ dnorm(mean = 0, sd = 2),
+  beta2 ~ dnorm(mean = 0, sd = 2),
+  beta3 ~ dnorm(mean = 0, sd = 2),
+  sigma ~ dnorm(mean = 0, sd = 1)
+)
+```
+
+```{r}
+model_descrip2 <- alist(
+  # note variable name has to match actual data variable name
+  weight_scaled ~ dnorm(mu, sigma),
+  mu ~ beta0 + beta1 * avgfood_scaled + beta2 * groupsize_scaled,
+  beta0 ~ dnorm(mean = 0, sd = 1),
+  beta1 ~ dnorm(mean = 0, sd = 2),
+  beta2 ~ dnorm(mean = 0, sd = 2),
+  sigma ~ dnorm(mean = 0, sd = 1)
+)
+```
+
+```{r}
+model_descrip3 <- alist(
+  # note variable name has to match actual data variable name
+  weight_scaled ~ dnorm(mu, sigma),
+  mu ~ beta0 + beta1 * avgfood_scaled,
+  beta0 ~ dnorm(mean = 0, sd = 1),
+  beta1 ~ dnorm(mean = 0, sd = 2),
+  sigma ~ dnorm(mean = 0, sd = 1)
+)
+```
+
+
+```{r}
+quap_fox_model <- quap(flist = model_descrip,
+                          data = foxes)
+```
+
+
+```{r}
+quap_fox_model2 <- quap(flist = model_descrip2,
+                          data = foxes)
+```
+
+```{r}
+quap_fox_model3 <- quap(flist = model_descrip3,
+                          data = foxes)
+```
+
+```{r}
+compare(quap_fox_model, quap_fox_model2 ,quap_fox_model3, func=WAIC )
+```
+
+The WAIC are also pretty close to one another but the initial normal model with 3 different parameters has the lowest score and thus has the lowest penalty in results. I had a third model with a WAIC score of 333.9 but I wasn't able to knit the file so I am still trouble shootinng. It may be it this new knit file.
+
+

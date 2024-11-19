@@ -1,0 +1,70 @@
+---
+title: "Test 2 Revisions"
+author: "Luca Seazzu"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: 
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question: 8a
+
+### Original answer:
+b is the prior distribution for the variable BMI
+
+### Original score: 2/4
+
+### Feedback I referenced
+"Now, fit a model with and effect of Virus and also a different slope for fake_qvar for each level of virus: one slope if there was no virus infection, and a different slope if there was viral infection." from Interaction Example
+
+### Revised answer
+b is the slope of triglyceride for BMI
+
+<!-- You can copy and paste the structure above to report revisions to more than one test question/part. -->
+
+## Question: 1b
+
+### Original answer:
+For prior c, they use a mu of 90 w/ sd of 5 when health WHR100 is between 85-100, what is an unhealthy WHR100? The prior attempts to skew the model towards a healthy output.
+
+### Original score: 2/4
+
+### Feedback I referenced
+"That's not quite what the problem is - c is a slope. also how exactly would we fix?
+
+### Revised answer
+The prior for c is the slope which could look something more like dnorm(0, 0.1) since the slope of BMI shouldn't be too large.
+
+## Question: 7b
+
+### Original answer:
+For b, I would lower the sd a lot since their prior knowledge tells them the avg BMI is 26.5. Potentially using a uniform prior from 18.4-29.9 could also help since they know the range of possible BMI.
+
+### Original score: 2/4
+
+### Feedback I referenced
+"But this prior is for the SLOPE of trigly vs. BMI"
+
+### Revised answer
+
+A better prior for b should be dnorm(0, 0.2) since b is the slope on BMI rather than BMI and thus we would need a slope for each BMI.
+The prior for c is the slope which could look something more like dnorm(0, 0.1) since the slope of BMI shouldn't be too large.
+
+## Question: 1a
+
+### Original answer:
+For prior b, they used a mu of exactly the BMI average that they expected but then a sd that would contain the entire range of healthy/overweight adults which doesn't inform the model well.
+
+### Original score: 2.5/4
+
+### Feedback I referenced
+"Why is this wrong/what is needed instead?"
+
+### Revised answer
+
+For prior b, they used a mu of exactly the BMI average that they expected but then a sd that would contain the entire range of healthy/overweight adults which doesn't inform the model well. So they should choose a prior b that is actually the slope of BMI and something more like dnorm(0, 0.1) since it shouldn't be drastic.

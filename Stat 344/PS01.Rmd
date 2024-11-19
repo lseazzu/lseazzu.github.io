@@ -1,0 +1,150 @@
+---
+title: "Stat 344 -- PS 01"
+author: "Luca Seazzu"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: 
+  pdf_document:
+    fig_height: 2.2
+    fig_width: 4
+  html_document:
+    fig_height: 2.2
+    fig_width: 4
+  word_document:
+    fig_height: 2.2
+    fig_width: 4
+---
+
+```{r, setup, include = FALSE}
+# load packages that are going to be used
+require(fastR2)   # this loads mosaic, ggformula, etc. too
+
+# Some customization.  You can alter or delete as desired (if you know what you are doing).
+
+theme_set(theme_bw())     # change theme for ggplot2/ggformula
+
+knitr::opts_chunk$set(
+  tidy = FALSE,     # display code as typed (rather than reformatted)
+  size = "small")   # slightly smaller font for code
+```
+
+
+<!-- Some macros to make mathematics easier -->
+
+\newcommand{\Prob}{\mathrm{P}}
+\newcommand{\intersect}{\;\cap\;}
+\newcommand{\union}{\operatorname{\cup}}
+\newcommand{\E}{\operatorname{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\SD}{\operatorname{SD}}
+
+<!-- Put your work below here.  Put text in text chunks, code in R chunks. -->
+
+### Problem 5.1
+In the situation of Example 5.1.1, there are only 11 possible values for the number of 1's and 2's observed (0, 1,..., 10). For each of these values, determine the maximum likelihood die.
+
+```{r}
+dbinom(0:10, 10, 1/2)
+
+dbinom(0:10, 10, 1/3)
+
+dbinom(0:10, 10, 1/5)
+```
+Maximum Likelihood for the following values:
+
+0: $\pi = 1/5$, 10-sided die
+
+1: $\pi = 1/5$, 10-sided die
+
+2: $\pi = 1/5$, 10-sided die
+
+3: $\pi = 1/3$, 6-sided die
+
+4: $\pi = 1/3$, 6-sided die
+
+5: $\pi = 1/2$, 4-sided die
+
+6: $\pi = 1/2$, 4-sided die
+
+7: $\pi = 1/2$, 4-sided die
+
+8: $\pi = 1/2$, 4-sided die
+
+9: $\pi = 1/2$, 4-sided die
+
+10: $\pi = 1/2$, 4-sided die
+
+
+### Problem 5.2
+In the situation of Example 5.1.1, suppose Mike rolls the ten-sided die. What is the probability that it will be the maximum likelihood die?
+
+```{r}
+sum(dbinom(0:2, 10, 1/5)) ##or
+pbinom(2, 10, 1/5)
+```
+
+
+### Problem 5.3
+Let $X ~ iid Unif(0, \theta)$ as in Example 5.1.4. Find the maximum likelihood estimate for $\theta$ using the data from Example 4.2.2. What advantage of the MLE over the method of moments estimator does this example illustrate?
+
+Using the MLE from Example 5.1.4 where $\hat{\theta}$ = M = max(X) and then using the data from Example 4.2.2, $\hat{\theta}$ = M = max(X) = 5.1
+
+An issue with method of moments here is that it does not include the maximum and we know that $\theta \ge 5.1$ since L is a a monotone decreasing function. MLE will always have the maximum of the dataset available whereas method of moments may not select the maximum.
+
+### Problem 5.4
+Let X be a random variable with pdf
+
+$f(x;\theta) = (\theta + 1)x^\theta$ on $[0,1]$.
+
+a) Derive the method of moments estimator for $\theta$.
+
+$E(X) = \int_0 ^1 xf(x)dx$
+
+$E(X) = \int_0 ^{1} x(\theta + 1)x^{\theta} dx$
+
+$E(X) = \frac{\theta+1}{\theta + 2}$
+
+$\frac{\theta+1}{\theta+2} = \bar{X}$
+
+$\hat{\theta} = \frac{2\bar X -1}{1- \bar X}$
+
+
+b) Derive the maximum likelihood estimator for $\theta$.
+
+Likelihood function = products of likelihood
+log likelihood function = log of products of likelihood
+Take the derivative of the likelihood function in terms of parameter
+set equal to zero and solve for the parameter which gives the maximum likelihood estimator
+
+$L(x;\theta) = \Pi_{i=1} ^n[(\theta + 1)x_i^\theta]$
+
+$l(x) = log(L(x)) = \sum_{i=1}^n [log(\theta+1) +\theta log(x_i)]$
+
+$=nlog(\theta+1) + \theta\sum_{i=1}^n [log(x_i)]$
+
+$\frac{d}{d\theta} [nlog(\theta+1) + \theta\sum_{i=1}^n [log(x_i)]]$
+
+$= \frac{n}{\theta +1} + \sum_{i=1}^n [log(x_i)] = 0$
+
+$\hat{\theta} = -\frac{n}{\sum_{i} [log(x_i)]} - 1$
+
+
+c) Find the method of moments estimator for $\theta$ based on the sample data below.
+
+0.90    0.78    0.93    0.64    0.45    0.85    0.75    0.93    0.98    0.78
+
+$\hat{\theta} = \frac{2\bar X -1}{1- \bar X}$ where $\bar X$ is the mean of the sample.
+
+```{r}
+Xbar <- c(0.9, 0.78, 0.93, 0.64, 0.45, 0.85, 0.75, 0.93, 0.98, 0.78); mean(Xbar)
+```
+
+$\hat{\theta} = \frac{2(0.799) -1}{1- 0.799}$ = 2.975124$
+
+d) Find the maximum likelihood estimator for $\theta$ based on the same sample.
+
+```{r}
+thetahat <- ((-length(Xbar)/sum(log(Xbar))) - 1)
+thetahat
+```
+
+

@@ -1,0 +1,140 @@
+---
+title: "Stat 344 -- PS 03"
+author: "Luca Seazzu"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: 
+  pdf_document:
+    fig_height: 2.2
+    fig_width: 4
+  html_document:
+    fig_height: 2.2
+    fig_width: 4
+  word_document:
+    fig_height: 2.2
+    fig_width: 4
+---
+
+```{r, setup, include = FALSE}
+# load packages that are going to be used
+require(fastR2)   # this loads mosaic, ggformula, etc. too
+library(tidyverse)
+library(mosaic)
+library(maxLik)
+library(ggplot2)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+
+# Some customization.  You can alter or delete as desired (if you know what you are doing).
+
+theme_set(theme_bw())     # change theme for ggplot2/ggformula
+
+knitr::opts_chunk$set(
+  tidy = FALSE,     # display code as typed (rather than reformatted)
+  size = "small")   # slightly smaller font for code
+```
+
+
+<!-- Some macros to make mathematics easier -->
+
+\newcommand{\Prob}{\mathrm{P}}
+\newcommand{\intersect}{\;\cap\;}
+\newcommand{\union}{\operatorname{\cup}}
+\newcommand{\E}{\operatorname{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\SD}{\operatorname{SD}}
+
+<!-- Put your work below here.  Put text in text chunks, code in R chunks. -->
+
+### Problem 5.24
+
+a.
+See attached pdf.
+
+b. 
+```{r}
+x <- c(.64, .92, .73, .96, .98, .33, .8, .96, .81, .76, .98, .75, .87, .82, .44, .96, .61, .32, .67, .98, .96, .88, .85, 1, .86, .88, .80, .83, .64, .5)
+```
+
+
+```{r}
+W <- function(x, theta0 = 0){
+  x_sum <- sum(x) 
+  n <- length(x) 
+  theta.hat <- (n / -sum(log(x)) - 1)
+  -2 * log(theta0 + 1) + 2 * log(theta.hat + 1) + (log(x_sum) * (2 * theta.hat - 2 * theta0))
+}
+```
+
+```{r}
+W(x)
+```
+c. 
+```{r}
+p_value <- 1 - pchisq(W(x), df = 1)
+p_value
+```
+
+There doesn't seem to be any reason to be concerned about this p-value since it is so small to reject the null hypothesis that theta = 0 when the data doesn't seem to suggest that.
+
+d.
+```{r}
+rdata <- do(5000) * runif(30, 0,1)
+
+statTally(x, rdata, W)
+```
+Simulated data reveals a p-value of p = 0.000287 which is consistent with the real data.
+
+e.
+The two p-values are slightly different but both are really small and consistent with each other. Both reject the null hypothesis that theta = 0 because the data shows that theta isn't really even close to 0.
+
+### Problem 5.29
+
+See attached hand-written pdf
+
+### Problem 5.30
+
+a.
+
+theta = p(1)^n1 * p(2)^n2 * p(3)^n3 * p(4)^n4
+      = .25^4(2theta - 3theta^2 + theta^4)^n
+```{r}
+n <- c(1997, 906, 904, 32)
+
+LL <- function(theta, x){
+  x[1] * log(.25 * (2 + theta)) +  x[2] * log(.25 * (1-theta)) + x[3] * log(.25 * (1-theta)) + x[4] * log(.25 * (theta))
+}
+
+maxLik(LL, start = .5 , x = n)
+```
+      
+MLE = 0.0357123 
+
+b.
+
+```{r}
+W2 <- 2 * (LL(0.0357123, n) - LL(0.05, n))
+
+p_value2 <- 1 - pchisq(W2, df = 1)
+p_value2
+```
+P-value = 0.03 therefore reject the hypothesis that theta = 0.05
+
+c.
+
+```{r}
+W3 <- 2 * (LL(0.0357123, n) - LL(0.03, n))
+
+p_value3 <- 1 - pchisq(W3, df = 1)
+p_value3
+```
+P-value = 0.318 therefore fail to reject the hypothesis that theta = 0.03
+
+d.
+
+```{r}
+W4 <- 2 * (LL(0.0357123, n) - LL(0.07, n))
+
+p_value4 <- 1 - pchisq(W4, df = 1)
+p_value4
+```
+
+P-value = 0.0000039 therefore reject the hypothesis that theta = 0.07

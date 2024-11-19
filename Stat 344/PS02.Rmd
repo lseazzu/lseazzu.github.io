@@ -1,0 +1,163 @@
+---
+title: "Stat 344 -- PS 2"
+author: "Luca Seazzu"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: 
+  pdf_document:
+    fig_height: 2.2
+    fig_width: 4
+  html_document:
+    fig_height: 2.2
+    fig_width: 4
+  word_document:
+    fig_height: 2.2
+    fig_width: 4
+---
+
+```{r, setup, include = FALSE}
+# load packages that are going to be used
+require(fastR2)   # this loads mosaic, ggformula, etc. too
+library(tidyverse)
+library(mosaic)
+library(maxLik)
+library(ggplot2)
+
+# Some customization.  You can alter or delete as desired (if you know what you are doing).
+
+theme_set(theme_bw())     # change theme for ggplot2/ggformula
+
+knitr::opts_chunk$set(
+  tidy = FALSE,     # display code as typed (rather than reformatted)
+  size = "small")   # slightly smaller font for code
+```
+
+
+<!-- Some macros to make mathematics easier -->
+
+\newcommand{\Prob}{\mathrm{P}}
+\newcommand{\intersect}{\;\cap\;}
+\newcommand{\union}{\operatorname{\cup}}
+\newcommand{\E}{\operatorname{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\SD}{\operatorname{SD}}
+
+<!-- Put your work below here.  Put text in text chunks, code in R chunks. -->
+
+
+```{r}
+mrc <- read.csv('http://sldr.netlify.app/data/mrc.csv')
+```
+
+
+### Problem 5.6
+
+X ~ Multinom($\pi$)
+
+$n = \sum x_i$
+
+$l(\pi ; x) = logL(\pi ; x) = \sum _i log(dmultinnom(x_i, \pi)$)
+
+$\infty x_1log(\pi_1) + ... + x_klog(\pi_k) = \tilde{l}(\pi; x)$
+half infinity, not full infinity
+
+Given $g(\pi) = \sum_{i=1}^k \pi_i$ when $g(\pi) =1$
+
+$\Delta \tilde{l} (x; \pi) = \lambda \Delta g(\pi)$
+
+$g(\pi) = 1$
+
+$\frac{x_1}{\pi_1} = \lambda_1$ -> $\pi_1 = \frac{x_1}{\lambda}$
+
+$\frac{x_2}{\pi_2} = \lambda_1$ -> $\pi_2 = \frac{x_2}{\lambda}$
+
+$\frac{x_1}{\pi_3} = \lambda_3$ -> $\pi_3 = \frac{x_3}{\lambda}$
+
+Substituting in, $\pi_1 + \pi_2 + \pi_3 +...+ \pi_k = 1$
+
+$\frac{x_1 + x_2 + x_3 + ... + x_k}{\lambda} = 1$
+
+$\frac{n}{\lambda} = 1$ -> $\lambda = n$
+
+So then $\pi_1 = \frac{x_1}{n}, \pi_2 = \frac{x_2}{n}, ..., \pi_k = \frac{x_k}{n}$ so $\pi_i = \frac{x_i}{n}$
+
+
+### Problem 5.10
+
+Repeat Example 5.1.4 Using numerical methods
+
+Find the Maximum likelihood estimator for 
+
+
+```{r, echo = TRUE}
+#$L(\theta ; x) = 0$ 
+  
+#if $\theta < 8.7$ , 
+
+#$(\frac{1}{\theta})^n $ 
+
+#if $ \theta \ge 8.7$  
+```
+
+
+
+$log(L(\theta ;x)) = log(\Pi_{i=1} ^6[(\frac{1}{\theta})^n])$
+
+$=log(\frac{1}{\theta})^6$
+
+$=\frac{d}{d\theta} (6log(\frac{1}{\theta})) = -\frac{6}{\theta}$ 
+
+$-\frac{6}{\theta} = 0$
+
+$\hat{\theta} = \frac{1}{6}$
+
+```{r}
+data <- c(1.6, 2.8, 6.2, 8.2, 8.5, 8.7)
+```
+
+
+```{r}
+LL <- function(theta, x){
+  b <- theta[1]
+  dunif(x, min = 0, max = b, log = TRUE)
+}
+```
+
+```{r}
+maxLik(LL, start = c(b = 10), x = data)
+```
+
+### Problem 5.12
+
+```{r}
+mrc <- read.csv('http://sldr.netlify.app/data/mrc.csv') |>
+  filter(mobility > 0)
+```
+
+```{r}
+gf_histogram(~mobility, data = mrc)
+```
+
+```{r}
+LL2 <- function(theta, x){
+  alpha <- theta[1]
+  beta <- theta[2]
+  if (alpha < 0) return(NA)
+  if (beta < 0) return(NA)
+  dbeta(x, shape1 = alpha, shape2 = beta, log = TRUE)
+}
+```
+
+```{r}
+maxLik(LL2, start = c(alpha = 1, beta = 150), x = mrc$mobility)
+```
+
+```{r}
+gf_dist("beta", shape1 = 3.155, shape2= 192.61)
+```
+
+The model seems pretty good for the model given how well the beta distribution with the given parameters from the MLE function. When overlayed a histogram of the original data, the graphs appear to line up pretty well in distribution. 
+
+
+
+
+  

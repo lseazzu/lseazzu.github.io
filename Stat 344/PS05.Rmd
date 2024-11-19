@@ -1,0 +1,144 @@
+---
+title: "Stat 344 -- PS05"
+author: "Luca Seazzu"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: 
+  pdf_document:
+    fig_height: 2.2
+    fig_width: 4
+  html_document:
+    fig_height: 2.2
+    fig_width: 4
+  word_document:
+    fig_height: 2.2
+    fig_width: 4
+---
+
+```{r, setup, include = FALSE}
+# load packages that are going to be used
+require(fastR2)   # this loads mosaic, ggformula, etc. too
+library(tidyverse)
+library(mosaic)
+library(maxLik)
+library(ggplot2)
+
+# Some customization.  You can alter or delete as desired (if you know what you are doing).
+
+theme_set(theme_bw())     # change theme for ggplot2/ggformula
+
+knitr::opts_chunk$set(
+  tidy = FALSE,     # display code as typed (rather than reformatted)
+  size = "small")   # slightly smaller font for code
+```
+
+
+<!-- Some macros to make mathematics easier -->
+
+\newcommand{\Prob}{\mathrm{P}}
+\newcommand{\intersect}{\;\cap\;}
+\newcommand{\union}{\operatorname{\cup}}
+\newcommand{\E}{\operatorname{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\SD}{\operatorname{SD}}
+
+<!-- Put your work below here.  Put text in text chunks, code in R chunks. -->
+
+### Problem 5.26
+
+
+
+### 5.30
+
+```{r}
+n <- c(1997, 906, 904, 32)
+
+LL <- function(theta, x){
+  x[1] * log(.25 * (2 + theta)) +  x[2] * log(.25 * (1-theta)) + x[3] * log(.25 * (1-theta)) + x[4] * log(.25 * (theta))
+}
+
+maxLik(LL, start = .5 , x = n)
+```
+
+e.
+
+```{r}
+o <- n; o
+
+sn <- sum(n); sn
+
+theta <- 0.0357123
+
+probs <- c(.25*(2 + theta), (.25 * (1-theta)), (.25 * (1-theta)), (.25 * theta))
+
+e <- probs * sn
+
+G <- 2 * sum(o * log(o / e)); G
+
+1 - pchisq(G, df = 2)
+```
+Data did not fit the model well with a goodness-of-fit p-value of .36
+
+f.
+
+```{#r}
+
+theta.hat <- 0.0357123 
+
+pval_minus_critical <- function(theta0) {
+  2 * (LL(theta.hat, x) - LL(theta0, x)) - qchisq(.95, df = 1)
+}
+
+lo <- uniroot(pval_minus_critical, c(0, theta.hat)) |> value()
+hi <- uniroot(pval_minus_critical, c(theta.hat, 1)) |> value()
+
+c(lo,hi)
+```
+
+
+### 5.33
+
+```{r}
+bin.pois <- function() {
+  
+rdata <- data.frame(V1 = rpois(1000, lambda = 15))
+
+breaks <-c(0, 5, 10, 15, 20, 25, Inf)
+
+rdata <- rdata |> 
+  mutate(binned = cut(V1, breaks = breaks))
+tally(~binned, data = rdata)
+
+count_dat <- data.frame(tally(~binned, data = rdata))
+count_dat <- count_dat |>
+mutate(probs = diff(ppois(breaks, lambda = 10)),
+e = sum(count_dat$Freq) * probs )
+
+G_pois <- 2 * sum( count_dat$Freq * log( count_dat$Freq / count_dat$e))
+
+1 - pchisq(G_pois, df = nrow(count_dat) - 1 - 2)
+}
+
+bin.pois()
+```
+  
+### 5.36
+
+```{r}
+Fusion1m <- merge(FUSION1, Pheno, by = "id", all = FALSE)
+
+genotype <- tally(~ t2d + genotype, data = Fusion1m)
+
+Gdose <- tally(~ t2d + Gdose, data = Fusion1m)
+```
+
+a. T is the most common allele among cases than among controls.
+
+b. 
+
+```{r}
+chisq.test(genotype)
+```
+
+Based on the chi-squared test, there is an association between the SNP and type 2 diabetes.
+
+c. knowing this marker was just one part of a larger study with over 300,000 SNPs changes how to interpret these results because

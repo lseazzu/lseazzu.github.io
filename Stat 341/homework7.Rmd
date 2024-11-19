@@ -1,0 +1,151 @@
+---
+title: "Stat 341 -- Homework 7"
+author: "Luca Seazzu"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: 
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r, setup, include = FALSE, message=FALSE}
+# load packages that are going to be used
+library(mosaic)      # this loads ggformula (for plotting), etc. too
+library(fastR2)      # some data sets
+library(pander)      # nicely formatted tables with pander()
+library(knitr)       # so you can use kable() for tables
+library(patchwork)   # for combining plots
+
+# data wrangling
+library(tidyverse)
+
+# several packages for bayesian stuff -- more may come later
+library(rethinking)  # related to text
+library(tidybayes)    
+library(bayesplot)
+library(CalvinBayes)
+
+
+# Some customization. You can alter or delete as desired (if you know what you are doing).
+
+theme_set(theme_bw())     # change theme for ggplot2/ggformula
+
+knitr::opts_chunk$set(
+  tidy = FALSE,     # display code as typed (rather than reformatted)
+  fig.width = 4,    # adjust this to make figures wider or narrower
+  fig.height = 2.5, # adjust this to make figures taller or shorrter
+  size = "small")   # slightly smaller font for code
+```
+
+
+<!-- A few math abbreviations -->
+
+\newcommand{\Prob}{\operatorname{Pr}}
+\newcommand{\Binom}{\operatorname{Binom}}
+\newcommand{\Unif}{\operatorname{Unif}}
+\newcommand{\Triangle}{\operatorname{Triangle}}
+\newcommand{\Norm}{\operatorname{Norm}}
+\newcommand{\Beta}{\operatorname{Beta}}
+\newcommand{\E}{\operatorname{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\SD}{\operatorname{SD}}
+
+<!-- Put your work below here.  Put text in text chunks, code in R chunks. -->
+
+## Problem Number 8E1
+
+For each of the causal relationships below, name a hypothetical third variable that would lead to an interaction effect.
+
+1) Bread dough rises because of yeast. The heat from the oven
+
+2) Education leads to higher income. High level job
+
+3) Gasoline makes a car go. An engine
+
+## Problem Number 8E2
+
+Which of the following explanations invokes an interaction?
+
+1) Caramelizing onions requires cooking over low heat and making sure the onions do not dry out. Interaction
+
+2) A car will go faster when it has more cylinders or when it has a better fuel injector. No interaction
+
+3) Most people acquire their political beliefs from their parents, unless they get them instead from their friends. Interaction
+
+4) Intelligent annimal species tend to be either highly social or have manipulative appendages. No interaction
+
+
+## Problem Number N1
+
+```{r}
+library(rethinking)
+data("Wines2012")
+Wines2012 <- Wines2012 |>
+  # make a standardized version of the score variable
+  mutate(score.std = as.numeric(scale(score)),
+         # categorical versions of some variables originally coded 0/1
+         wine.origin = ifelse(wine.amer == 1, 'USA', 'Other'),
+         judge.nationality = ifelse(judge.amer == 1, 'USA', 'France'),
+         # numeric index versions of the same categorical variables
+         origin.ix = as.numeric(factor(wine.origin)),
+         judge.ix = as.numeric(factor(judge.nationality))
+         )
+```
+
+# A) Description
+
+$$\text{score.std} \sim \text{Normal}(\mu_i, \sigma)$$
+$$\mu_i \sim  \beta_1[origin.ix] + \beta_2[judge.ix]$$
+
+$$\beta_1 \sim \text{Norm}(\text{mean} = 0, \text{sd} = .25) $$
+$$\beta_2 \sim \text{Norm}(\text{mean} = 0, \text{sd} = .25) $$
+$$\sigma \sim \text{LNormal}(\text{mean} = 1, \text{sd} = .25)$$
+```{r}
+model_descrip <- alist(
+  # note variable name has to match actual data variable name
+  score.std ~ dnorm(mu, sigma),
+  mu ~ beta1[origin.ix] + beta2[judge.ix],
+  beta1[origin.ix] ~ dnorm(mean = 0, sd = .25),
+  beta2[judge.ix] ~ dnorm(mean = 0, sd = .25),
+  sigma ~ dlnorm(mean = 1, sd = .25)
+)
+```
+
+# B) Defining the interaction
+
+If the wine.origin and judge.nationality variables interact it means that the origin of the wine has an interaction effect with the wine score the judge gives based on the judge's nationality. An interaction model is different because it is where one predictor is dependent upon another predictor whereas without it, it would simply be a model of each individual predictor's effect on the model.
+
+# C) Priors
+The priors are selecting with mean = 0 for beta1 and beta2 because it should be that a judge scores wine the same regardless of their own nationality and the nationality of the wine but the .25 sd should account for any bias. The sigma prior is mean = 1 with sd = .25 just to account for possible error.
+
+
+# D) Fit
+
+```{r}
+quap_wine_model <- quap(flist = model_descrip,
+                          data = Wines2012)
+```
+
+# E) Interpret
+
+```{r}
+wine_ps <- extract.samples(quap_wine_model) |>
+  data.frame()
+glimpse(wine_ps)
+```
+
+```{r}
+wine_ps_plot <- pivot_longer(wine_ps, cols = everything())
+glimpse(wine_ps_plot)
+```
+
+```{r}
+gf_dens(~value, data = wine_ps_plot) |>
+  gf_facet_wrap(~name, scales = "free_y")
+```
+
+```{r}
+gf_dens(~value, color = ~name, data = wine_ps_plot, size = 2)
+```
+
+Based on the graphs, it appears that beta1.1 and beta2.2 have slightly higher wine scores which shows that judges scoring wine which they share a nationality with will be higher. Thus, it is important to include the interaction effect between the judge's nationality and the national origin of wine since they impact together the response variable.

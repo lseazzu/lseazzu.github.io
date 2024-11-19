@@ -1,0 +1,651 @@
+Rank,Club,Income (Million Euros),Country,Change In Rank,Previous Rank,Year
+1,Manchester City,731, England, —,1,2022
+2,Real Madrid,713.8, Spain, —,2,2022
+3,Liverpool,701.7, England, +4,7,2022
+4,Manchester United,688.6, England, +1,5,2022
+5,Paris Saint-Germain,654.2, France, +1,6,2022
+6,Bayern Munich,653.6, Germany, -3,3,2022
+7,Barcelona,638.2, Spain, -3,4,2022
+8,Chelsea,568.3, England, —,8,2022
+9,Tottenham Hotspur,523, England, +1,10,2022
+10,Arsenal,433.5, England, +1,11,2022
+11,Juventus,400.6, Italy, -1,9,2022
+12,Atlético Madrid,393.8, Spain, +1,13,2022
+13,Borussia Dortmund,356.9, Germany, -1,12,2022
+14,Internazionale,308.4, Italy, —,14,2022
+15,West Ham United,301.5, England, +1,16,2022
+16,Milan,264.9, Italy, +3,19,2022
+17,Leicester City,255.5, England, -2,15,2022
+18,Leeds United,223.4, England, +5,23,2022
+19,Everton,213.7, England, -1,18,2022
+20,Newcastle United,212.3, England, +9,29,2022
+21,Aston Villa,210.9, England, —,21,2022
+22,Eintracht Frankfurt,208.3, Germany,0,31+,2022
+23,Brighton & Hove Albion,198.4, England,0,31+,2022
+24,Benfica,196.7, Portugal,0,31+,2022
+25,Wolverhampton Wanderers,195.4, England, -8,17,2022
+26,Crystal Palace,188.9, England,0,31+,2022
+27,Ajax,187.2, Netherlands,0,31+,2022
+28,Sevilla,186.1, Spain, -6,22,2022
+29,Villarreal,178.7, Spain,0,31+,2022
+30,Southampton,177.7, England, -4,26,2022
+1,Manchester City,644.9, England, +5,6,2021
+2,Real Madrid,640.7, Spain, —,2,2021
+3,Bayern Munich,611.4, Germany, —,3,2021
+4,Barcelona,582.1, Spain, -3,1,2021
+5,Manchester United,558, England, -1,4,2021
+6,Paris Saint-Germain,556.2, France, +1,7,2021
+7,Liverpool,550.4, England, -2,5,2021
+8,Chelsea,493.1, England, —,8,2021
+9,Juventus,433.5, Italy, +1,10,2021
+10,Tottenham Hotspur,406.2, England, -1,9,2021
+11,Arsenal,366.5, England, —,11,2021
+12,Borussia Dortmund,337.6, Germany, —,12,2021
+13,Atlético Madrid,332.8, Spain, —,13,2021
+14,Internazionale,330.9, Italy, —,14,2021
+15,Leicester City,255.5, England, +7,22,2021
+16,West Ham United,221.5, England, +10,26,2021
+17,Wolverhampton Wanderers,219.2, England, +12,29,2021
+18,Everton,218.1, England, -1,17,2021
+19,Milan,216.3, Italy, +11,30,2021
+20,Zenit Saint Petersburg,212, Russia, -5,15,2021
+21,Aston Villa,207.3, England,0,31+,2021
+22,Sevilla,199.5, Spain,0,31+,2021
+23,Leeds United,192.7, England,0,31+,2021
+24,Roma,190.4, Italy,0,31+,2021
+25,Atalanta,187.6, Italy,0,31+,2021
+26,Borussia Mönchengladbach,177.5, Germany, -2,24,2021
+0,Southampton,177.5, England,0,31+,2021
+28,Napoli,174.5, Italy, -9,19,2021
+29,Newcastle United,170.1, England,0,31+,2021
+30,Lazio,163.5, Italy,0,31+,2021
+1,Barcelona,713.4, Spain, —,1,2020
+2,Real Madrid,691.8, Spain, —,2,2020
+3,Bayern Munich,634.1, Germany, +1,4,2020
+4,Manchester United,580.4, England, -1,3,2020
+5,Liverpool,558.6, England, +2,7,2020
+6,Manchester City,549.2, England, —,6,2020
+7,Paris Saint-Germain,540.6, France, -2,5,2020
+8,Chelsea,469.7, England, +1,9,2020
+9,Tottenham Hotspur,445.7, England, -1,8,2020
+10,Juventus,398.9, Italy, —,10,2020
+11,Arsenal,388, England, —,11,2020
+12,Borussia Dortmund,365.7, Germany, —,12,2020
+13,Atlético Madrid,331.8, Spain, —,13,2020
+14,Internazionale,291.5, Italy, —,14,2020
+15,Zenit Saint Petersburg,236.5, Russia, +13,28,2020
+16,Schalke 04,222.8, Germany, -1,15,2020
+17,Everton,212, England, +2,19,2020
+18,Lyon,180.7, France, -1,17,2020
+19,Napoli,176.3, Italy, +1,20,2020
+20,Eintracht Frankfurt,174, Germany, +7,27,2020
+21,Valencia,172.1, Spain, +5,26,2020
+22,Leicester City,171, England, —,22,2020
+23,Benfica,170.3, Portugal, +1,24,2020
+24,Borussia Mönchengladbach,167.9, Germany,0,31+,2020
+25,Crystal Palace,161.3, England, +5,30,2020
+26,West Ham United,158, England, -8,18,2020
+27,Ajax,155.5, Netherlands, -4,23,2020
+28,Sheffield United,152, England,0,31+,2020
+29,Wolverhampton Wanderers,151.2, England, -4,25,2020
+30,Milan,148.5, Italy, -9,21,2020
+1,Barcelona,840.8, Spain, +1,2,2019
+2,Real Madrid,757.3, Spain, -1,1,2019
+3,Manchester United,711.5, England, —,3,2019
+4,Bayern Munich,660.1, Germany, —,4,2019
+5,Paris Saint-Germain,635.9, France, +1,6,2019
+6,Manchester City,610.6, England, -1,5,2019
+7,Liverpool,604.7, England, —,7,2019
+8,Tottenham Hotspur,521.1, England, +2,10,2019
+9,Chelsea,513.1, England, -1,8,2019
+10,Juventus,459.7, Italy, +1,11,2019
+11,Arsenal,445.2[5], England, -2,9,2019
+12,Borussia Dortmund,371.7[5], Germany, —,12,2019
+13,Atlético Madrid,367.6, Spain, —,13,2019
+14,Internazionale,364.6, Italy, —,14,2019
+15,Schalke 04,324.8, Germany, +1,16,2019
+16,Roma,231, Italy, -1,15,2019
+17,Lyon,220.9[5], France, +11,28,2019
+18,West Ham United,216.4, England, +2,20,2019
+19,Everton,210.5[5], England, -2,17,2019
+20,Napoli,207.4, Italy, +1,21,2019
+21,Milan,206.3, Italy, -3,18,2019
+22,Leicester City,200, England, —,22,2019
+23,Ajax,199.4, Netherlands,0,31+,2019
+24,Benfica,197.6, Portugal, +6,30,2019
+25,Wolverhampton Wanderers,195.5, England,0,31+,2019
+26,Valencia,184.7, Spain,0,31+,2019
+27,Eintracht Frankfurt,183.8, Germany,0,31+,2019
+28,Zenit Saint Petersburg,180.4, Russia, -3,25,2019
+29,Porto,176.2, Portugal,0,31+,2019
+30,Crystal Palace,174.5, England, -6,24,2019
+1,Real Madrid,750.9, Spain, +1,2,2018
+2,Barcelona,690.4, Spain, +1,3,2018
+3,Manchester United,665.8[7], England, ?2,1,2018
+4,Bayern Munich,629.2, Germany, —,4,2018
+5,Manchester City,568.4, England, —,5,2018
+6,Paris Saint-Germain,541.7, France, +1,7,2018
+7,Liverpool,513.7, England, +2,9,2018
+8,Chelsea,505.7, England, —,8,2018
+9,Arsenal,439.2, England, -3,6,2018
+10,Tottenham Hotspur,428.3, England, +1,11,2018
+11,Juventus,394.5[7], Italy, -1,10,2018
+12,Borussia Dortmund,317.2, Germany, —,12,2018
+13,Atlético Madrid,304.4, Spain, —,13,2018
+14,Internazionale,280.8, Italy, +1,15,2018
+15,Roma,250, Italy, +9,24,2018
+16,Schalke 04,243.8, Germany, —,16,2018
+17,Everton,212.9, England, +3,20,2018
+18,Milan,207.7, Italy, +4,22,2018
+19,Newcastle United,201.5, England,0,31+,2018
+20,West Ham United,197.9, England, -3,17,2018
+21,Napoli,182.8, Italy, -2,19,2018
+22,Leicester City,179.4, England, -8,14,2018
+23,Southampton,172, England, -5,18,2018
+24,Crystal Palace,169, England, +2,26,2018
+25,Zenit Saint Petersburg,167.8, Russia, -2,23,2018
+26,Be?ikta?,165.7, Turkey,0,31+,2018
+27,Sevilla,165.2, Spain,0,31+,2018
+28,Lyon,164.2, France, -7,21,2018
+29,Brighton & Hove Albion,157.4, England,0,31+,2018
+30,Benfica,150.7, Portugal, —,30,2018
+1,Manchester United,676.3, England, —,1,2017
+2,Real Madrid,674.6, Spain, +1,3,2017
+3,Barcelona,648.3, Spain, ?1,2,2017
+4,Bayern Munich,587.8, Germany, —,4,2017
+5,Manchester City,527.7, England, —,5,2017
+6,Arsenal,487.6, England, +1,7,2017
+7,Paris Saint-Germain,486.2, France, ?1,6,2017
+8,Chelsea,428, England, —,8,2017
+9,Liverpool,424.2, England, —,9,2017
+10,Juventus,405.7, Italy, —,10,2017
+11,Tottenham Hotspur,359.5[9], England, +1,12,2017
+12,Borussia Dortmund,332.6, Germany, ?1,11,2017
+13,Atlético Madrid,272.5, Spain, —,13,2017
+14,Leicester City,271.1, England, +6,20,2017
+15,Internazionale,262.1, Italy, +4,19,2017
+16,Schalke 04,230.2, Germany, ?2,13,2017
+17,West Ham United,213.3, England, +1,18,2017
+18,Southampton,212.1, England, +4,22,2017
+19,Napoli,200.7, Italy, +11,30,2017
+20,Everton,199.2, England, +3,23,2017
+21,Lyon,198.3, France, +3,24,2017
+22,Milan,191.7, Italy, -6,16,2017
+23,Zenit Saint Petersburg,180.4, Russia, -6,17,2017
+24,Roma,171.8, Italy, -9,15,2017
+25,Borussia Mönchengladbach,169.3, Germany, +3,28,2017
+26,Crystal Palace,164, England,0,31+,2017
+27,West Bromwich Albion,160.5, England,0,31+,2017
+28,AFC Bournemouth,159.2, England,0,31+,2017
+29,Stoke City,158.3, England,0,31+,2017
+30,Benfica,157.6, Portugal, -3,27,2017
+1,Manchester United,689, England, +2,3,2016
+2,Barcelona,620.2, Spain, —,2,2016
+3,Real Madrid,620.1, Spain, ?2,1,2016
+4,Bayern Munich,592, Germany, +1,5,2016
+5,Manchester City,524.9, England, +1,6,2016
+6,Paris Saint-Germain,520.9, France, ?2,4,2016
+7,Arsenal,468.5, England, —,7,2016
+8,Chelsea,447.4, England, —,8,2016
+9,Liverpool,403.8, England, —,9,2016
+10,Juventus,338.9[11], Italy, —,10,2016
+11,Borussia Dortmund,283.9, Germany, —,11,2016
+12,Tottenham Hotspur,279.7, England, —,12,2016
+13,Atlético Madrid,228.6, Spain, +2,15,2016
+14,Schalke 04,224.5, Germany, ?1,13,2016
+15,Roma,218.2, Italy, +1,16,2016
+16,Milan,214.6[11], Italy, ?2,14,2016
+17,Zenit Saint Petersburg,196.5, Russia, +1,18,2016
+18,West Ham United,192.3, England, +3,21,2016
+19,Internazionale,179.2, Italy, +1,20,2016
+20,Leicester City,172.1, England, +5,25,2016
+21,Newcastle United,168.2, England, ?4,17,2016
+22,Southampton,163.3, England, +1,23,2016
+23,Everton,162.5, England, ?4,19,2016
+24,Lyon,160, France,0,31+,2016
+25,Fenerbahçe,157.7, Turkey,0,31+,2016
+26,Galatasaray,155.9, Turkey, -4,22,2016
+27,Benfica,152.1, Portugal,0,31+,2016
+28,Borussia Mönchengladbach,149.3, Germany,0,31+,2016
+29,Sunderland,144.4, England, -3,26,2016
+30,Napoli,142.7, Italy, +1,31,2016
+1,Real Madrid,577, Spain, —,1,2015
+2,Barcelona,560.8, Spain, +2,4,2015
+3,Manchester United,519.5, England, ?1,2,2015
+4,Paris Saint-Germain,480.8, France, +1,5,2015
+5,Bayern Munich,474, Germany, ?2,3,2015
+6,Manchester City,463.5, England, —,6,2015
+7,Arsenal,435.5, England, +1,8,2015
+8,Chelsea,420, England, ?1,7,2015
+9,Liverpool,391.8, England, —,9,2015
+10,Juventus,323.9, Italy, —,10,2015
+11,Borussia Dortmund,280.6, Germany, —,11,2015
+12,Tottenham Hotspur,257.5, England, +1,13,2015
+13,Schalke 04,219.7, Germany, +1,14,2015
+14,Milan,199.1, Italy, ?2,12,2015
+15,Atlético Madrid,176.6[13], Spain, —,15,2015
+16,Roma,179.1[13], Italy, +8,24,2015
+17,Newcastle United,169.3, England, +2,19,2015
+18,Zenit Saint Petersburg,167.8[13], Russia,0,31+,2015
+19,Everton,165.1, England, +2,20,2015
+20,Internazionale,164.8, Italy, -2,17,2015
+21,West Ham United,160.9, England, +1,21,2015
+22,Galatasaray,159.1, Turkey, -3,18,2015
+23,Southampton,149.5, England, +3,25,2015
+24,Aston Villa,148.8, England, -1,22,2015
+25,Leicester City,137.2, England,0,31+,2015
+26,Sunderland,132.9, England, +2,27,2015
+27,Swansea City,132.8, Wales, +3,29,2015
+28,Stoke City,130.9, England, +3,30,2015
+29,Crystal Palace,130.8, England,0,31+,2015
+30,West Bromwich Albion,126.6, England,0,31+,2015
+31,Napoli,125.5, Italy, -14,16,2015
+1,Real Madrid,549.5, Spain, —,1,2014
+2,Manchester United,518, England, +2,4,2014
+3,Bayern Munich,487.5, Germany, —,3,2014
+4,Barcelona,484.8[15], Spain, ?2,2,2014
+5,Paris Saint-Germain,471.3[15], France, —,5,2014
+6,Manchester City,416.5[15], England, —,6,2014
+7,Chelsea,387.9, England, —,7,2014
+8,Arsenal,359.3, England, —,8,2014
+9,Liverpool,305.9, England, +3,12,2014
+10,Juventus,279.0[15], Italy, ?1,9,2014
+11,Borussia Dortmund,261.5, Germany, —,11,2014
+12,Milan,249.7, Italy, ?2,10,2014
+13,Tottenham Hotspur,215.5[15], England, +1,14,2014
+14,Schalke 04,214.0[15], Germany, -1,13,2014
+15,Atlético Madrid,169.9, Spain, +5,20,2014
+16,Napoli,164.8, Italy, +6,22,2014
+17,Internazionale,162.8[15], Italy, -2,15,2014
+18,Galatasaray,161.9, Turkey, -2,16,2014
+19,Newcastle United,155.1, England, +6,25,2014
+20,Everton,144.1, England,0,31+,2014
+21,West Ham United,137.4, England, +8,29,2014
+22,Aston Villa,133, England,0,31+,2014
+23,Marseille,130.5, France, +7,30,2014
+24,Roma,127.4, Italy, -5,19,2014
+25,Southampton,126.9, England,0,31+,2014
+26,Benfica,126, Portugal, —,26,2014
+27,Sunderland,124.8, England,0,31+,2014
+28,Hamburger SV,120.3, Germany, -11,17,2014
+29,Swansea City,118, Wales,0,31+,2014
+30,Stoke City,117.6, England,0,31+,2014
+1,Real Madrid,518.9, Spain, —,1,2013
+2,Barcelona,482.6, Spain, —,2,2013
+3,Bayern Munich,431.2, Germany, +1,4,2013
+4,Manchester United,423.8, England, ?1,3,2013
+5,Paris Saint-Germain,398.8, France, +5,10,2013
+6,Manchester City,316.2, England, +1,7,2013
+7,Chelsea,303.4, England, ?2,5,2013
+8,Arsenal,284.3, England, ?2,6,2013
+9,Juventus,272.4, Italy, +4,13,2013
+10,Milan,263.5, Italy, ?2,8,2013
+11,Borussia Dortmund,256.2, Germany, +1,12,2013
+12,Liverpool,240.6, England, ?3,9,2013
+13,Schalke 04,198.2, Germany, +2,15,2013
+14,Tottenham Hotspur,172, England, —,14,2013
+15,Internazionale,164.5[17], Italy, ?4,11,2013
+16,Galatasaray,157, Turkey, +3,19,2013
+17,Hamburger SV,135.4, Germany, +3,20,2013
+18,Fenerbahçe,126.4, Turkey,0,31+,2013
+19,Roma,124.4, Italy, +2,21,2013
+20,Atlético Madrid,120, Spain, +5,25,2013
+21,VfB Stuttgart,116.5, Germany, +6,27,2013
+22,Napoli,116.4, Italy, -1,21,2013
+23,Valencia,116, Spain, —,22,2013
+24,Corinthians,113.3, Brazil, +8,32,2013
+25,Newcastle United,111.9, England, -3,22,2013
+26,Benfica,109.2, Portugal, -2,24,2013
+27,Ajax,107.6, Netherlands, -1,26,2013
+28,Lazio,106.2, Italy,0,31+,2013
+29,West Ham United,104.8, England,0,30,2013
+30,Marseille,104.3, France, -13,17,2013
+1,Real Madrid,512.6, Spain, —,1,2012
+2,Barcelona,483, Spain, —,2,2012
+3,Manchester United,395.9, England, —,3,2012
+4,Bayern Munich,368.4, Germany, —,4,2012
+5,Chelsea,322.6, England, —,5,2012
+6,Arsenal,290.3, England, —,6,2012
+7,Manchester City,285.6, England, +5,12,2012
+8,Milan,256.9, Italy, ?1,7,2012
+9,Liverpool,233.2, England, —,9,2012
+10,Paris Saint-Germain,220.5[19], France,0,31+,2012
+11,Internazionale,200.6[19], Italy, ?3,8,2012
+12,Borussia Dortmund,196.7[19], Germany, +4,16,2012
+13,Juventus,195.4, Italy, —,13,2012
+14,Tottenham Hotspur,178.2, England, ?3,11,2012
+15,Schalke 04,174.5, Germany, ?5,10,2012
+16,Napoli,148.4, Italy, +4,20,2012
+17,Marseille,135.7, France, ?3,14,2012
+18,Lyon,131.9, France, ?1,17,2012
+19,Galatasaray,129.7[19], Turkey,0,31+,2012
+20,Hamburger SV,121.1, Germany, ?2,18,2012
+21,Roma,115.9, Italy, -6,15,2012
+22,Newcastle United,115.3, England, +3,25,2012
+23,Valencia,111.1, Spain, -4,19,2012
+24,Benfica,111.1, Portugal, -3,21,2012
+25,Atlético Madrid,107.9, Spain, -3,22,2012
+26,Ajax,104.1, Netherlands, —,26,2012
+27,VfB Stuttgart,103.2, Germany, —,27,2012
+28,Everton,99.5, England, —,28,2012
+29,Aston Villa,98.6, England, -5,24,2012
+30,Fulham,98, England,0,31+,2012
+31,Sunderland,96.4, England, -1,30,2012
+32,Corinthians,94.1, Brazil,0,31+,2012
+1,Real Madrid,479.5, Spain, —,1,2011
+2,Barcelona,450.7, Spain, —,2,2011
+3,Manchester United,367, England, —,3,2011
+4,Bayern Munich,321.4, Germany, —,4,2011
+5,Arsenal,251.1, England, —,5,2011
+6,Chelsea,253.1[21], England, —,6,2011
+7,Milan,234.8[21], Italy, —,7,2011
+8,Internazionale,211.4, Italy, +1,9,2011
+9,Liverpool,203.3, England, ?1,8,2011
+10,Schalke 04,202.4, Germany, +6,16,2011
+11,Tottenham Hotspur,181, England, +1,12,2011
+12,Manchester City,169.6, England, ?1,11,2011
+13,Juventus,153.9, Italy, ?3,10,2011
+14,Marseille,150.4, France, +1,15,2011
+15,Roma,143.5, Italy, +3,18,2011
+16,Borussia Dortmund,138.5, Germany, +6,22,2011
+17,Lyon,132.8, France, ?3,14,2011
+18,Hamburger SV,128.8, Germany, ?5,13,2011
+19,Valencia,116.8, Spain, +6,25,2011
+20,Napoli,114.9, Italy, +9,29,2011
+21,Benfica,102.5, Portugal, +5,26,2011
+22,Atlético Madrid,99.9, Spain, ?5,17,2011
+23,Werder Bremen,99.7, Germany, +5,28,2011
+24,Aston Villa,99.3, England, ?4,20,2011
+25,Newcastle United,98, England,0,31+,2011
+26,Ajax,97.1, Netherlands,0,31+,2011
+27,VfB Stuttgart,95.5, Germany, ?8,19,2011
+28,Everton,90.8, England, ?1,27,2011
+29,West Ham United,89.1, England, +3,31,2011
+30,Sunderland,87.9, England,0,31+,2011
+1,Real Madrid,438.6, Spain,0,0,2010
+2,Barcelona,398.1, Spain,0,0,2010
+3,Manchester United,349.8, England,0,0,2010
+4,Bayern Munich,323, Germany,0,0,2010
+5,Arsenal,274.1, England,0,0,2010
+6,Chelsea,255.9, England,0,0,2010
+7,Milan,244[23], Italy,3,0,2010
+8,Liverpool,225.3, England,1,0,2010
+9,Internazionale,224.8, Italy,0,0,2010
+10,Juventus,205, Italy,2,0,2010
+11,Manchester City,152.8, England,8,0,2010
+12,Tottenham Hotspur,146.3, England,3,0,2010
+13,Hamburger SV,146.2, Germany,2,0,2010
+14,Lyon,146.1, France,1,0,2010
+15,Marseille,141.1, France,1,0,2010
+16,Schalke 04,139.8, Germany,0,0,2010
+17,Atlético Madrid,124.5, Spain,5,0,2010
+18,Roma,122.7, Italy,6,0,2010
+19,VfB Stuttgart,114.8, Germany,5,0,2010
+20,Aston Villa,109.4, England,5,0,2010
+21,Fiorentina,106.4, Italy,5,0,2010
+22,Borussia Dortmund,105.2, Germany,0,0,2010
+23,Bordeaux,102.8, France,0,0,2010
+24,Sevilla,99.6, Spain,0,0,2010
+25,Valencia,99.3, Spain,0,0,2010
+26,Benfica,98.2, Portugal,0,0,2010
+27,Everton,96.6, England,0,0,2010
+28,Werder Bremen,96.5, Germany,11,0,2010
+29,Napoli,95.1, Italy,1,0,2010
+30,Fulham,94.2, England,0,0,2010
+31,West Ham United,87.6, England,2,0,2010
+1,Real Madrid,401.4, Spain,0,0,2009
+2,Barcelona,365.9, Spain,1,0,2009
+3,Manchester United,327, England,1,0,2009
+4,Bayern Munich,289.5, Germany,0,0,2009
+5,Arsenal,263, England,1,0,2009
+6,Chelsea,242.3, England,1,0,2009
+7,Liverpool,217, England,0,0,2009
+8,Juventus,203.2, Italy,3,0,2009
+9,Internazionale,196.5, Italy,1,0,2009
+10,Milan,196.5, Italy,2,0,2009
+11,Hamburger SV,146.7, Germany,4,0,2009
+12,Roma,146.4, Italy,3,0,2009
+13,Lyon,139.6, France,1,0,2009
+14,Marseille,133.2, France,2,0,2009
+15,Tottenham Hotspur,132.7, England,1,0,2009
+16,Schalke 04,124.5, Germany,3,0,2009
+17,Werder Bremen,114.7, Germany,>3,0,2009
+18,Borussia Dortmund,103.5, Germany,2,0,2009
+19,Manchester City,102.2, England,2,0,2009
+20,Newcastle United,101, England,3,0,2009
+21,Paris Saint-Germain,100.8, France,0,0,2009
+22,Atlético Madrid,100.3, Spain,0,0,2009
+23,Bordeaux,99.8, France,0,0,2009
+24,VfB Stuttgart,99.8, Germany,6,0,2009
+25,Aston Villa,98.9, England,0,0,2009
+26,Fiorentina,94.1, Italy,0,0,2009
+27,Everton,93.5, England,0,0,2009
+28,Napoli,90.1, Italy,0,0,2009
+29,West Ham United,89.3, England,0,0,2009
+30,Fenerbahçe,87, Turkey,11,0,2009
+1,Real Madrid,365.8, Spain,0,0,2008
+2,Manchester United,324.8, England,0,0,2008
+3,Barcelona,308.8, Spain,0,0,2008
+4,Bayern Munich,295.3, Germany,0,0,2008
+5,Chelsea,268.9, England,0,0,2008
+6,Arsenal,264.4, England,0,0,2008
+7,Milan,209.5, Italy,0,0,2008
+8,Liverpool,207.4[26], England,0,0,2008
+9,Roma,175.4, Italy,0,0,2008
+10,Internazionale,172.9, Italy,0,0,2008
+11,Juventus,167.5, Italy,0,0,2008
+12,Lyon,155.7, France,0,0,2008
+13,Schalke 04,148.4, Germany,0,0,2008
+14,Tottenham Hotspur,145, England,0,0,2008
+15,Hamburger SV,127.9, Germany,0,0,2008
+16,Marseille,126.8, France,0,0,2008
+17,Newcastle United,125.6, England,0,0,2008
+18,VfB Stuttgart,111.5, Germany,0,0,2008
+19,Fenerbahçe,111.3, Turkey,0,0,2008
+20,Borussia Dortmund,107.6[26], Germany,0,0,2008
+21,Manchester City,104, England,0,0,2008
+1,Real Madrid,351, Spain,0,0,2007
+2,Manchester United,315.2, England,0,0,2007
+3,Barcelona,290.1, Spain,0,0,2007
+4,Chelsea,283, England,0,0,2007
+5,Arsenal,263.9, England,0,0,2007
+6,Milan,228.7[28], Italy,0,0,2007
+7,Bayern Munich,223.3, Germany,0,0,2007
+8,Liverpool,206.5[28], England,0,0,2007
+9,Internazionale,176.7[28], Italy,0,0,2007
+10,Tottenham Hotspur,153.1, England,0,0,2007
+11,Roma,145.2[28], Italy,0,0,2007
+12,Juventus,141.2[28], Italy,0,0,2007
+13,Lyon,140.6, France,0,0,2007
+14,Newcastle United,129.4, England,0,0,2007
+15,Hamburger SV,120.4, Germany,0,0,2007
+16,Schalke 04,114.3, Germany,0,0,2007
+17,Celtic,111.8, Scotland,0,0,2007
+18,Valencia,107.6, Spain,0,0,2007
+19,Marseille,99, France,0,0,2007
+20,Werder Bremen,97.3, Germany,0,0,2007
+1,Real Madrid,292.2,0,0,0,2006
+2,Barcelona,259.1, Spain,0,0,2006
+3,Juventus,251.2, Italy,0,0,2006
+4,Manchester United,242.6, England,0,0,2006
+5,Milan,238.7, Italy,0,0,2006
+6,Chelsea,221, England,0,0,2006
+7,Internazionale,206.6, Italy,0,0,2006
+8,Bayern Munich,204.7, Germany,0,0,2006
+9,Arsenal,192.4, England,0,0,2006
+10,Liverpool,176, England,0,0,2006
+11,Lyon,127.7, France,0,0,2006
+12,Roma,127, Italy,0,0,2006
+13,Newcastle United,124.3, England,0,0,2006
+14,Schalke 04,122.9, Germany,0,0,2006
+15,Tottenham Hotspur,107.2, England,0,0,2006
+16,Hamburger SV,101.8, Germany,0,0,2006
+17,Manchester City,89.4, England,0,0,2006
+18,Rangers,88.5, Scotland,0,0,2006
+19,West Ham United,86.9, England,0,0,2006
+20,Benfica,85.1, Portugal,0,0,2006
+1,Real Madrid,275.7, Spain,0,0,2005
+2,Manchester United,246.4, England,0,0,2005
+3,Milan,234, Italy,0,0,2005
+4,Juventus,229.4, Italy,0,0,2005
+5,Chelsea,220.8, England,0,0,2005
+6,Barcelona,207.9, Spain,0,0,2005
+7,Bayern Munich,189.5, Germany,0,0,2005
+8,Liverpool,181.2, England,0,0,2005
+9,Internazionale,177.2, Italy,0,0,2005
+10,Arsenal,171.3, England,0,0,2005
+11,Roma,131.8, Italy,0,0,2005
+12,Newcastle United,128.9, England,0,0,2005
+13,Tottenham Hotspur,104.5, England,0,0,2005
+14,Schalke 04,97.4, Germany,0,0,2005
+15,Lyon,92.9, France,0,0,2005
+16,Celtic,92.7, Scotland,0,0,2005
+17,Manchester City,90.1, England,0,0,2005
+18,Everton,88.8, England,0,0,2005
+19,Valencia,86.6[31], Spain,0,0,2005
+20,Lazio,83.1, Italy,0,0,2005
+21,Rangers,81.6, Scotland,0,0,2005
+22,Borussia Dortmund,79, Germany,0,0,2005
+23,Bolton Wanderers,78.6, England,0,0,2005
+24,Bayer Leverkusen,78.2, Germany,0,0,2005
+25,Middlesbrough,77, England,0,0,2005
+1,Manchester United,259, England,0,0,2004
+2,Real Madrid,236, Spain,0,0,2004
+3,Milan,222.3, Italy,0,0,2004
+4,Chelsea,217, England,0,0,2004
+5,Juventus,215, Italy,0,0,2004
+6,Arsenal,173.6, England,0,0,2004
+7,Barcelona,169.2, Spain,0,0,2004
+8,Internazionale,166.5, Italy,0,0,2004
+9,Bayern Munich,166.3, Germany,0,0,2004
+10,Liverpool,139.5, England,0,0,2004
+11,Newcastle United,136.6, England,0,0,2004
+12,Roma,108.8, Italy,0,0,2004
+13,Celtic,104.2, Scotland,0,0,2004
+14,Tottenham Hotspur,100.1, England,0,0,2004
+15,Lazio,99.4, Italy,0,0,2004
+16,Manchester City,93.5, England,0,0,2004
+17,Schalke 04,91.4, Germany,0,0,2004
+18,Marseille,88, France,0,0,2004
+19,Rangers,86.2, Scotland,0,0,2004
+20,Aston Villa,84.4, England,0,0,2004
+1,Manchester United,251.4, England,0,0,2003
+2,Juventus,218.3, Italy,0,0,2003
+3,Milan,200.2, Italy,0,0,2003
+4,Real Madrid,192.6, Spain,0,0,2003
+5,Bayern Munich,162.7, Germany,0,0,2003
+6,Internazionale,162.4, Italy,0,0,2003
+7,Arsenal,149.6, England,0,0,2003
+8,Liverpool,149.4, England,0,0,2003
+9,Newcastle United,138.9, England,0,0,2003
+10,Chelsea,133.8, England,0,0,2003
+11,Roma,132.4, Italy,0,0,2003
+12,Borussia Dortmund,124, Germany,0,0,2003
+13,Barcelona,123.4, Spain,0,0,2003
+14,Schalke 04,118.6, Germany,0,0,2003
+15,Tottenham Hotspur,95.6, England,0,0,2003
+16,Leeds United,92,England,0,0,2003
+17,Lazio,88.9, Italy,0,0,2003
+18,Celtic,87, Scotland,0,0,2003
+19,Lyon,84.3, France,0,0,2003
+20,Valencia,80.5, Spain,0,0,2003
+1,Manchester United,228.5, England,0,0,2002
+2,Juventus,177.1, Italy,0,0,2002
+3,Bayern Munich,176, Germany,0,0,2002
+4,Milan,158.9, Italy,0,0,2002
+5,Liverpool,153.5, England,0,0,2002
+6,Real Madrid,152, Spain,0,0,2002
+7,Chelsea,143.4, England,0,0,2002
+8,Arsenal,140.6, England,0,0,2002
+9,Barcelona,139, Spain,0,0,2002
+10,Roma,136.3, Italy,0,0,2002
+11,Leeds United,125.8, England,0,0,2002
+12,Internazionale,124, Italy,0,0,2002
+13,Newcastle United,109.4, England,0,0,2002
+14,Lazio,109.1, Italy,0,0,2002
+15,Borussia Dortmund,101.1, Germany,0,0,2002
+16,Tottenham Hotspur,100.4, England,0,0,2002
+17,Celtic,87.8, Scotland,0,0,2002
+18,Parma,0, Italy,0,0,2002
+19,West Ham United,0, England,0,0,2002
+20,Lyon,71.9, France,0,0,2002
+1,Manchester United,217.2, England,0,0,2001
+2,Juventus,173.5, Italy,0,0,2001
+3,Bayern Munich,173.2, Germany,0,0,2001
+4,Milan,164.6, Italy,0,0,2001
+5,Leeds United,0, England,0,0,2001
+6,Real Madrid,138.2, Spain,0,0,2001
+7,Liverpool,137.6, England,0,0,2001
+8,Lazio,125.4, Italy,0,0,2001
+9,Roma,123.8, Italy,0,0,2001
+10,Chelsea,118.4, England,0,0,2001
+11,Internazionale,112.8, Italy,0,0,2001
+12,Barcelona,110, Spain,0,0,2001
+13,Arsenal,107, England,0,0,2001
+14,Newcastle United,91, England,0,0,2001
+15,Hamburger SV,0, Germany,0,0,2001
+16,Tottenham Hotspur,80, England,0,0,2001
+17,Rangers,0, Scotland,0,0,2001
+18,Sunderland,0, England,0,0,2001
+19,Parma,0, Italy,0,0,2001
+20,Valencia,73, Spain,0,0,2001
+1,Manchester United,185.2, England,0,0,2000
+2,Real Madrid,164.2, Spain,0,0,2000
+3,Bayern Munich,145, Germany,0,0,2000
+4,Milan,142, Italy,0,0,2000
+5,Juventus,140, Italy,0,0,2000
+6,Lazio,125.7, Italy,0,0,2000
+7,Chelsea,121.5, England,0,0,2000
+8,Barcelona,119.1, Spain,0,0,2000
+9,Internazionale,107.7, Italy,0,0,2000
+10,Roma,101.5, Italy,0,0,2000
+11,Arsenal,97.1, England,0,0,2000
+12,Borussia Dortmund,94.3, Germany,0,0,2000
+13,Leeds United,90.5, England,0,0,2000
+14,Fiorentina,85.9, Italy,0,0,2000
+15,Rangers,81.9, Scotland,0,0,2000
+16,Marseille,77.7, France,0,0,2000
+17,Tottenham Hotspur,76.1, England,0,0,2000
+18,Parma,75.3, Italy,0,0,2000
+19,Liverpool,73.5, England,0,0,2000
+20,Newcastle United,71.5, England,0,0,2000
+1,Manchester United,169, England,0,0,1999
+2,Bayern Munich,127.2, Germany,0,0,1999
+3,Real Madrid,116, Spain,0,0,1999
+4,Chelsea,90.1, England,0,0,1999
+5,Juventus,89.1, Italy,0,0,1999
+6,Barcelona,84.9, Spain,0,0,1999
+7,Milan,82.4, Italy,0,0,1999
+8,Lazio,76.2, Italy,0,0,1999
+9,Internazionale,74.8, Italy,0,0,1999
+10,Arsenal,74.1, England,0,0,1999
+11,Liverpool,69, England,0,0,1999
+12,Newcastle United,68.1, England,0,0,1999
+13,Parma,67.7, Italy,0,0,1999
+14,Borussia Dortmund,66.9, Germany,0,0,1999
+15,Tottenham Hotspur,64.9, England,0,0,1999
+16,Roma,60, Italy,0,0,1999
+17,Leeds United,56.4, England,0,0,1999
+18,Rangers,55.6, Scotland,0,0,1999
+19,Aston Villa,53.2, England,0,0,1999
+20,Celtic,51.5, Scotland,0,0,1999
+1,Manchester United,135, England,0,0,1998
+2,Real Madrid,110.9, Spain,0,0,1998
+3,Bayern Munich,100.1, Germany,0,0,1998
+4,Juventus,84.9, Italy,0,0,1998
+5,Newcastle United,75.6, England,0,0,1998
+6,Barcelona,74.59, Spain,0,0,1998
+7,Milan,74.55, Italy,0,0,1998
+8,Internazionale,74, Italy,0,0,1998
+9,Chelsea,72.9, England,0,0,1998
+10,Liverpool,69.9, England,0,0,1998
+11,Borussia Dortmund,63.7, Germany,0,0,1998
+12,Lazio,63.1, Italy,0,0,1998
+13,Arsenal,62, England,0,0,1998
+14,Parma,51.3, Italy,0,0,1998
+15,Paris Saint-Germain,50.5, France,0,0,1998
+16,Rangers,49.9, Scotland,0,0,1998
+17,Aston Villa,48.8, England,0,0,1998
+18,Tottenham Hotspur,47.9, England,0,0,1998
+19,Roma,47.1, Italy,0,0,1998
+20,Leeds United,43.5, England,0,0,1998

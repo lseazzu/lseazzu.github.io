@@ -1,0 +1,130 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+```{r setup, include=FALSE}
+library(tidyverse)
+library(mosaic)
+knitr::opts_chunk$set(echo = TRUE, fig.width = 6.5, fig.height = 3.5)
+```
+
+## Starting Point
+
+For this exercise you'll want a **posterior** to *sample from* and *summarize*, so start with the `tibble` (data table) you ended with last time, containing the `p_grid`, `prior`, `likelihood` and `posterior` for our class example. (Copy over whatever code is needed from there, to here...)
+
+```{r}
+blood_data2 <-
+  tibble(p_grid = seq(from = 0, to = 1, length.out = 30),      # define grid
+         prior  = 1) |>                                       # define prior
+  mutate(likelihood = dbinom(3, size = 3000, prob = p_grid)) |>  # compute likelihood at each value in grid
+  mutate(unstd_posterior = likelihood * prior) |>             # compute product of likelihood and prior
+  mutate(posterior = unstd_posterior / sum(unstd_posterior))   # standardize the posterior, so it sums to 1
+
+
+# to peek at the results table
+glimpse(blood_data2)
+```
+
+##  Alternate Route to Posterio: `quap()` and MCMC
+
+So far, you got your posterior via **grid search** -- conjecture a set of discrete values (as many as you choose) for your parameter $p$, and compute the likelihood of the data  and the value of the  posterior corresponding to each one. Put all those posterior values together and you get the  posterior distribution. It's an intuitive way to start, but...
+
+### Question 1: What  are the downsides of this way of estimating the posterior?
+
+Later in the course, we will learn to fit Bayesian models using Markov Chain Monte Carlo (MCMC) and once we learn it *that* will be our main approach.
+
+Meanwhile, we'll consider one more way to fit models that is perhaps in-between grid and MCMC in terms of its pros and cons: **quadratic approximation** using function `quap()` from the `rethinking` package.
+
+As *Rethinking* says on page 42,
+
+>> the region near the peak of the posterior distribution will be nearly Gaussian — or "normal" — in  shape...A Gaussian approximation is called "quadratic approximation" because the [natural] logarithm of  a Gaussian distribution forms a parabola. And a parabola is a quadratic function. So this  approximation essentially represents any log-posterior with a parabola.
+
+###  Question 2: Using your previous graph(s) to check, do you think this is true for our example?
+
+There are 2 steps in the `quap()` process:
+
+1) Find the location of the posterior mode (highest peak of posterior likelihood)
+2) Estimate  the curvature of the posterior near the peak (usually using a numerical method)
+
+### Question 3: Based on your previous graphs, estimate where the posterior mode is for our example.
+
+OK, now try out `quap()`!
+
+```{r, fit-with-quap}
+library(rethinking)
+
+# be sure to translate everything from water  to blood!
+RENAME_ME <- quap(
+  alist(
+    # W stands for "Water" you may want to rename to match your data!
+    # (you will need to fill in the blanks)
+    obs ~ dbinom(____, ____),  # binomial likelihood 
+    p ~ dunif(0 , 1)        # **uniform** prior for the probability of success, "p"
+  ), 
+  data = list(W = ___, L = ___)
+)
+
+# display summary of quadratic approximation 
+precis(your_renamed_results)
+```
+
+How well does this quadratic approximation work? Does it's accuracy depend on sample size? To find out, here's the function I used to generate our blood dataset and how you can use it to get a larger sample size $n$. You can try to roughly understand how I made it, but you won't need to do it yourself -- just use it to obtain larger datasets.
+
+```{r}
+# create a  new R function to generate "blood or not" data with P(Blood) = 0.115
+get_blood_samples <- function(n, p = 0.115){
+  blood_sample <- rbinom(n = n, size = 1, p = p)
+  blood_sample <- ifelse(blood_sample == 0, 'O', 'B')
+  return(blood_sample)
+}
+```
+
+```{r}
+bigger_blood_data  <- get_blood_samples(n = 30)
+```
+
+### Question 4 [OPTIONAL/if time]: So, how *does* the quadratic approximation perform as you increase the dataset size? *Note, you have to have some idea of how to judge what  the "right answer" (true posterior) is in order to answer this!*
+
+## Where Next: Interpret & Present the Posterior
+
+Once you have the posterior, you have your answer! Right?!?
+
+Well...yes, and no. You need to be able to interpret it, and clearly communicate what it means. Let's devise some tools.
+
+## Samples vs. Function
+Before, you worked to compute and graph the **probability distribution function** that is the posterior.
+
+So for every conjectured value of the parameter $p$ = $P(Blood)$, you could say how likely it is, given the sample data, relative to other possible conjectured values of $p$.
+
+Another way of coming at the problem could be to get a (hypothetical) *sample* from the posterior. A conjectured value of $p$ will show up in the sample more often if it has higher likelihood.
+
+```{r}
+# how many samples would you like?
+# (you may play with adjusting this if you want)
+n_samples <- 10000
+
+# make it reproducible: get the same exact samples each time
+# by setting the "seed" of the random number generator
+# you can change the  3 to  an integer of your choice
+set.seed(3)
+
+samples <-
+  # note: you'll want the version of blood_data2 that you did NOT pivot_longer()
+  # so the likelihood and prior and posterior are in different columns
+  blood_data2 |> 
+  slice_sample(n = n_samples, 
+               weight_by = posterior, 
+               replace = TRUE) |>
+  # sort of optional - but to avoid confusion, keep ONLY the posterior
+  select(posterior)
+
+glimpse(samples)
+```
+
+
+### Question 5: Why did we create `samples` as a  standalone object, instead of making it a variable in the `blood_data2` tibble (tibble = dataset $\approx$ data.frame)?
+
+### Question 6: How can you **show** (in a graph) and **summarize** (with numbers and calculations?) the posterior, using the sample `samples`? Come up with as many ideas as you can and implement them. 
+
+### Question 7: What's the best number of  posterior samples to get? How would you recommend choosing?

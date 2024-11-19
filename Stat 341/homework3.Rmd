@@ -1,0 +1,121 @@
+---
+title: "Stat 341 -- Homework 03"
+author: "Luca Seazzu"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: 
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r, setup, include = FALSE, message=FALSE}
+# load packages that are going to be used
+
+
+# data wrangling
+
+
+# several packages for bayesian stuff -- more may come later
+library(rethinking)  # related to text
+library(tidybayes)    
+library(bayesplot)
+
+# Some customization. You can alter or delete as desired (if you know what you are doing).
+
+theme_set(theme_bw())     # change theme for ggplot2/ggformula
+
+knitr::opts_chunk$set(
+  tidy = FALSE,     # display code as typed (rather than reformatted)
+  fig.width = 4,    # adjust this to make figures wider or narrower
+  fig.height = 2.5, # adjust this to make figures taller or shorrter
+  size = "small")   # slightly smaller font for code
+```
+
+<!-- A few math abbreviations -->
+
+\newcommand{\Prob}{\operatorname{Pr}}
+\newcommand{\Binom}{\operatorname{Binom}}
+\newcommand{\Unif}{\operatorname{Unif}}
+\newcommand{\Triangle}{\operatorname{Triangle}}
+\newcommand{\Norm}{\operatorname{Norm}}
+\newcommand{\Beta}{\operatorname{Beta}}
+\newcommand{\E}{\operatorname{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\SD}{\operatorname{SD}}
+
+<!-- Put your work below here.  Put text in text chunks, code in R chunks. -->
+
+## N1
+
+```{r}
+library(dagitty)
+library(CalvinBayes)
+
+# create the DAG object
+causal_diagram_1 <- dagitty("dag{
+  area -> avgfood -> weight;
+  avgfood -> groupsize -> weight
+}")
+# plot it
+gg_dag(causal_diagram_1)
+```
+
+## N2
+A. 
+avgfood is a mediator variable between area and weight.
+groupsize is a mediator variable between avgfood and weight.  
+
+B.
+I would include both avgfood and groupsize variables since I don't think either are collider variables so I think they are helpful.
+
+## N3
+
+A.
+How does age and sex of a countries' current population project their future population?
+
+B.
+age and sex are the predicting variables for population, the response variable.
+
+C.
+current population, number of births, number of deaths, number of immigrants, and number of emigrants.
+
+D.
+```{r}
+# create the DAG object
+causal_diagram_3 <- dagitty("dag{
+  age -> number.of.births.minus.number.of.deaths.plus.number.of.immigrants.minus.number.of.emigrants -> population;
+  sex ->  number.of.births.minus.number.of.deaths.plus.number.of.immigrants.minus.number.of.emigrants -> population
+}")
+# plot it
+gg_dag(causal_diagram_3)
+```
+
+
+E.
+the calculations for population based on births, deaths, immigrants, and emigrants is a mediator variable
+
+F.
+Seems like the researchers model was based around either age or sex and then modified by their population calculation and then modeled so the causal diagram should be consistent.
+
+## N4
+
+A. After fitting a model in homework 2 to look at if a movie is animated or not, I would think that if the genre is or isn't horror and if the movie was for kids would both be variables relevant to the proportion I was estimating. I think more kids movies and movies that aren't horror movies would be relevant to if the movie was animated or not.
+
+B.
+
+```{r}
+# create the DAG object
+causal_diagram_2 <- dagitty("dag{
+  animation -> horror -> for_kids -> animated;
+  horror -> animated
+}")
+# plot it
+gg_dag(causal_diagram_2)
+```
+
+
+C.
+for_kids is a mediator variable and horror is a confounder variable.
+
+D.
+I think both for_kids and horror should have been included in the model fitted in homework 02.

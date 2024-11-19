@@ -1,0 +1,225 @@
+---
+title: "Stat 341 -- Homework 02"
+author: "Luca Seazzu"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: 
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r, setup, include = FALSE, message=FALSE}
+# load packages that are going to be used
+library(mosaic)      # this loads ggformula (for plotting), etc. too
+library(fastR2)      # some data sets
+library(pander)      # nicely formatted tables with pander()
+library(knitr)       # so you can use kable() for tables
+library(patchwork)   # for combining plots
+
+# data wrangling
+library(tidyverse)
+
+# several packages for bayesian stuff -- more may come later
+library(rethinking)  # related to text
+library(tidybayes)    
+library(bayesplot)
+library(CalvinBayes)
+
+
+# Some customization. You can alter or delete as desired (if you know what you are doing).
+
+theme_set(theme_bw())     # change theme for ggplot2/ggformula
+
+knitr::opts_chunk$set(
+  tidy = FALSE,     # display code as typed (rather than reformatted)
+  fig.width = 4,    # adjust this to make figures wider or narrower
+  fig.height = 2.5, # adjust this to make figures taller or shorrter
+  size = "small")   # slightly smaller font for code
+```
+
+
+<!-- A few math abbreviations -->
+
+\newcommand{\Prob}{\operatorname{Pr}}
+\newcommand{\Binom}{\operatorname{Binom}}
+\newcommand{\Unif}{\operatorname{Unif}}
+\newcommand{\Triangle}{\operatorname{Triangle}}
+\newcommand{\Norm}{\operatorname{Norm}}
+\newcommand{\Beta}{\operatorname{Beta}}
+\newcommand{\E}{\operatorname{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\SD}{\operatorname{SD}}
+
+<!-- Put your work below here.  Put text in text chunks, code in R chunks. -->
+
+```{r}
+p_grid <- seq(from = 0, to = 1, length.out = 1000)
+prior <- rep(1, 1000)
+likelihood <- dbinom(6, size = 9, prob = p_grid)
+posterior <- likelihood * prior
+posterior <- posterior / sum(posterior)
+set.seed(100)
+samples <- sample(p_grid, prob = posterior, size = 1e4, replace = TRUE)
+```
+
+## SR 3E1
+
+```{r}
+mean(samples < 0.2)
+```
+
+## SR 3E2
+
+```{r}
+mean(samples > 0.8)
+```
+
+## SR 3E3
+
+```{r}
+1 - mean(samples < 0.2) - mean(samples > 0.8)
+```
+
+## SR 3E4
+
+```{r}
+quantile(samples, 0.20)
+```
+
+## SR 3E5
+
+```{r}
+quantile(samples, 1 - 0.20)
+```
+
+## SR 3E6
+
+```{r}
+HPDI(samples, prob = 0.66)
+```
+
+## SR 3E7
+
+```{r}
+PI(samples, prob = 0.66)
+```
+
+## SR 3M1
+
+```{r}
+p_grid <- seq(from = 0, to = 1, length.out = 1e3)
+prior <- rep(1, 1e3)
+likelihood <- dbinom(8, size = 15, prob = p_grid)
+posterior <- likelihood * prior
+posterior <- posterior / sum(posterior)
+plot(x = p_grid, y = posterior, type = "l")
+```
+
+## SR 3M2
+
+```{r}
+samples <- sample(p_grid, prob = posterior, size = 1e4, replace = TRUE)
+HPDI(samples, prob = .90)
+```
+
+# N1
+
+```{r}
+movies <- read.csv('https://sldr.netlify.app/data/movielens.csv')
+
+# display a table of your variable of interest
+library(mosaic)
+# inputs are the variable you want to tally up, like: ~ VARIABLE_NAME 
+# and the name of the dataset, data  = ____
+tally(~ animation, data  = movies) |>
+  # adding kable() formats the table more prettily
+  knitr::kable()
+```
+
+```{r}
+# create a dataset containing the individual observations, if you only have n trials and n successes
+n_failures <- 1787
+n_successes <- 158
+own_data <- tibble(observations = 
+  c(rep('animated', n_successes),
+  rep('not animated', n_failures)))
+# all the successes will be first in the list, then the failures after
+head(own_data)
+```
+
+
+## Part A
+The quantity to estimate is if the movie is animated or not.
+
+## Part B
+I have little no no knowledge of the movie database so I am going to use an uninformative prior with a uniform distribution.
+
+```{r}
+my_unif_prior <- tibble(p_grid = seq(from = 0, to = 1, length.out = 1000),
+                        prior_density =dunif(p_grid, min = 0, max = 1))
+gf_line(prior_density ~ p_grid, data = my_unif_prior)
+```
+
+## Part C
+
+```{r}
+grid_movie_model <-
+  tibble(p_grid = seq(from = 0, to = 1, length.out = 100000),      # define grid
+         prior = dunif(p_grid, min = 0, max = 1)
+         ) |>                                       # define prior
+  mutate(likelihood = dbinom(n_successes, 
+                             size = n_successes  + n_failures, 
+                             prob = p_grid)) |>  # compute likelihood at each value in grid
+  mutate(unstd_posterior = likelihood * prior) |>             # compute product of likelihood and prior
+  mutate(posterior = unstd_posterior / sum(unstd_posterior))   # standardize the posterior, so it sums to 1
+
+
+# to peek at the results table
+glimpse(grid_movie_model)
+```
+
+```{r}
+grid_post_plot <- gf_point(posterior ~ p_grid, 
+                           data = grid_movie_model) |>
+  # this is optional -- adds a line in addition to  the dots
+  gf_line(color = 'grey44', alpha = 0.5) |>
+  gf_labs(x = 'Possible values of P(Prod)',
+          y = 'Posterior Probability')
+
+grid_post_plot |> gf_lims(x = c(0, 0.15))
+# zooms the graph in
+```
+
+## Part D
+
+```{r}
+post_samp_size = 10000
+# eliminate sampling variation: get the same exact samples each time you run/knit
+set.seed(7)
+grid_post_samp <- grid_movie_model |> 
+  slice_sample(n = post_samp_size, 
+               weight_by = 10000*posterior, 
+               replace = TRUE) |>
+  # sort of optional - but to avoid confusion, keep ONLY the posterior
+  select(p_grid) |>
+  rename(p = p_grid)
+```
+
+```{r}
+gf_dens(~p, data = grid_post_samp)
+```
+
+The first way I chose to represent the posterior was a density line graph. I chose this one because it is the best way to represent a sample from the posterior and see its distribution and where different likelihoods are. 
+
+```{r}
+HPDI(grid_post_samp$p, prob  = 0.95)
+```
+The second way I chose to represent the posterior was numerical and showing the Highest Posterior Density Interval which gives the boundaries of the .95 proportion of the sample from the posterior that has the highest density. In this case it lies between roughly .069 and .094 which looks similar to the results of the graph but in numerical form.
+
+## Part E
+
+I learned from this that based on the movie database data, there is a range of probabilities that the movie is animated and within a 95% bounderie of the proportion, lies between 6.98% and 9.42% that a movie is animated vs. not animated.
+
+## Part F
+
+Some qualms would first be the data source since 1945 movies seems kind of low as a data size to make interpretations. It would be nice to also see if there are more kids movies that are animated versus not kids movies since that is probably heavily involved. I do like the way a bayesian model presents the findings though.

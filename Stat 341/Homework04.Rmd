@@ -1,0 +1,373 @@
+---
+title: "Stat 341 -- Homework 04"
+author: "Luca Seazzu"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: 
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r, setup, include = FALSE, message=FALSE}
+# load packages that are going to be used
+library(mosaic)      # this loads ggformula (for plotting), etc. too
+library(fastR2)      # some data sets
+library(pander)      # nicely formatted tables with pander()
+library(knitr)       # so you can use kable() for tables
+library(patchwork)   # for combining plots
+
+# data wrangling
+library(tidyverse)
+
+# several packages for bayesian stuff -- more may come later
+library(rethinking)  # related to text
+library(tidybayes)    
+library(bayesplot)
+library(CalvinBayes)
+
+
+# Some customization. You can alter or delete as desired (if you know what you are doing).
+
+theme_set(theme_bw())     # change theme for ggplot2/ggformula
+
+knitr::opts_chunk$set(
+  tidy = FALSE,     # display code as typed (rather than reformatted)
+  fig.width = 4,    # adjust this to make figures wider or narrower
+  fig.height = 2.5, # adjust this to make figures taller or shorrter
+  size = "small")   # slightly smaller font for code
+```
+
+
+<!-- A few math abbreviations -->
+
+\newcommand{\Prob}{\operatorname{Pr}}
+\newcommand{\Binom}{\operatorname{Binom}}
+\newcommand{\Unif}{\operatorname{Unif}}
+\newcommand{\Triangle}{\operatorname{Triangle}}
+\newcommand{\Norm}{\operatorname{Norm}}
+\newcommand{\Beta}{\operatorname{Beta}}
+\newcommand{\E}{\operatorname{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\SD}{\operatorname{SD}}
+
+<!-- Put your work below here.  Put text in text chunks, code in R chunks. -->
+
+## N1
+
+```{r}
+fiji <- read_csv('https://sldr.netlify.app/data/fiji-filters.csv') |> 
+  mutate(household_annual_income = household_annual_income / 1000)
+```
+
+
+```{r}
+n_grid = 500
+
+grid_income_model <-
+  crossing(
+    mu = seq(from = 50, to = 65, length.out = n_grid),
+    sigma = seq(from = 80, to = 95, length.out = n_grid)
+    ) |>
+  mutate(
+    # based on: http://www.salaryexplorer.com/salary-survey.php?loc=72&loctype=1
+    prior_mu = dnorm(mu, mean = 57.7, sd = 5),
+    prior_sigma = dnorm(sigma, mean = 41, sd = 20)
+  ) |>
+  rowwise() |>
+  mutate(
+    logL = dnorm(
+      fiji$household_annual_income,
+      mean = mu,
+      sd = sigma,
+      log = TRUE
+      ) |>
+      sum()
+    )|>
+  ungroup() |>
+  mutate(
+    unscaled_ln_post = logL + log(prior_mu) + log(prior_sigma)
+  ) |>
+  mutate(
+    scaled_posterior = 
+      exp(unscaled_ln_post - max(unscaled_ln_post)
+          )
+  )
+glimpse(grid_income_model)
+```
+
+### A.
+Model Description
+
+$$\text{household annual income} \sim \text{Normal}(\mu, \sigma)$$
+
+$$\mu \sim  \text{Normal}(\text{mean}_1=57.7, \text{sd}_1 = 5)$$
+
+$$\sigma \sim  \text{Normal}(\text{mean}_2=41, \text{sd}_2 = 20)$$
+
+### B.
+```{r, eval = FALSE}
+n_grid = 500
+
+grid_income_model <-
+  crossing(
+    mu = seq(from = 50, to = 65, length.out = n_grid),
+    sigma = seq(from = 80, to = 95, length.out = n_grid)
+    ) |>
+  mutate(
+    # based on: http://www.salaryexplorer.com/salary-survey.php?loc=72&loctype=1
+    prior_mu = dnorm(mu, mean = 57.7, sd = 5),
+    prior_sigma = dnorm(sigma, mean = 41, sd = 20)
+  ) |>
+  rowwise() |>
+  mutate(
+    likelihood = dnorm(
+      fiji$household_annual_income,
+      mean = mu,
+      sd = sigma,
+      ) |>
+      sum()
+    )|>
+  ungroup() |>
+  mutate(
+    unscaled_post = likelihood + prior_mu + prior_sigma
+  ) |>
+  mutate(
+    scaled_posterior = 
+      exp(unscaled_post - max(unscaled_post)
+          )
+  )
+```
+
+### C. 
+Define the grid
+```{r}
+grid_income_model2 <-
+  crossing(
+    mu = seq(from = 50, to = 65, length.out = n_grid),
+    sigma = seq(from = 80, to = 95, length.out = n_grid)
+    )
+glimpse(grid_income_model2)
+```
+Looks good so far.
+
+Define the priors
+```{r}
+grid_income_model2 <- grid_income_model2 |>
+  mutate(
+    # based on: http://www.salaryexplorer.com/salary-survey.php?loc=72&loctype=1
+    prior_mu = dnorm(mu, mean = 57.7, sd = 5),
+    prior_sigma = dnorm(sigma, mean = 41, sd = 20)
+  )
+glimpse(grid_income_model2)
+```
+Prior_mu and prior_sigma looks really small and looks the same as before.
+
+Compute the likelihood
+```{r}
+grid_income_model2 <- grid_income_model2 |>
+  mutate(
+    likelihood = dnorm(
+      fiji$household_annual_income,
+      mean = mu,
+      sd = sigma,
+      ) |>
+      sum()
+  )
+glimpse(grid_income_model2)
+```
+Likelihood is almost a thousand as a positive number whereas the Log likelihood was around -6000.
+
+Compute the posterior
+```{r}
+grid_income_model2 <- grid_income_model2 |>
+  mutate(
+    unscaled_post = likelihood + prior_mu + prior_sigma)
+glimpse(grid_income_model2)
+```
+Appears the priors have little effect on the unscaled posterior because the likelihood is so high and the priors are so small.
+
+Scale the posterior
+
+```{r}
+grid_income_model2 <- grid_income_model2 |>
+    mutate(
+    scaled_posterior = 
+      exp(unscaled_post - max(unscaled_post)
+          ))
+glimpse(grid_income_model2)
+```
+Scaled posterior is anow a value just under 1 around .95 whereas on the log scale it was around 0.
+
+## N2
+
+```{r}
+set.seed(19)
+phones <- read_csv('https://osf.io/download/r8s6n/') |>
+  rename(participant_id = pp,
+         program = faculty,
+         phone_use = total_a20,
+         percent_private_phone_use = privateUse,
+         use = smartphoneUse,
+         ) |>
+  mutate(fomo_score = (fomo1 + fomo2 + fomo3)) |>
+  select(participant_id,
+         program,
+         age,
+         gender,
+         fatigue,
+         fomo_score,
+         boredom,
+         phone_use,
+         percent_private_phone_use,
+         use,) |>
+  mutate(phone_frequency = case_when(use == 1 ~ 'never',
+                               use ==2 ~ 'once daily',
+                               use == 3 ~ 'several times a day',
+                               use == 4 ~ 'once an hour',
+                               use == 5 ~ 'several times an hour',
+                               use == 6 ~ 'every few minutes')) |>
+  select(-use) |>
+  drop_na(phone_use) |>
+  filter(phone_use > 0)
+```
+
+### A. Fit
+
+```{r}
+model_descrip <- alist(
+  phone_use ~ dnorm(mu, sigma),
+  mu ~ dnorm(mean = 120, sd =120),
+  sigma ~ dnorm(mean = 300, sd = 100)
+)
+
+quap_phone_model <- quap(flist = model_descrip, data = phones)
+```
+
+### B.
+
+```{r}
+quap_phone_model <- quap(flist = model_descrip,
+                          data = phones)
+quap_phone_post_sample <- extract.samples(quap_phone_model, n = 1000)
+```
+
+```{r}
+gf_dens(~mu, data = quap_phone_post_sample)
+gf_dens(~sigma, data = quap_phone_post_sample)
+```
+Based on these graphs, the prior could've been something more like mu ~ norm(175, 15) and sigma ~ norm(225, 10)
+
+### C.
+```{r}
+phone_ppred <- quap_phone_post_sample |>
+  # add row numbers to "label" each sampled combo of mu & sigma
+  mutate(row_num = c(1:n())) |>
+  # work one row (one mu, sigma combination) at a time
+  rowwise() |>
+  # simulate a dataset for each row (= each mu, sigma combo)  
+  mutate(ppred = list(rnorm(nrow(phones), 
+                            mean = mu,
+                            sd = sigma))) |>
+  # keep only the row-ids and the simulated data
+  select(row_num, ppred) 
+```
+
+```{r}
+phone_ppred <- phone_ppred |>
+  unnest(cols = ppred)
+```
+
+```{r}
+gf_dens(~ppred, group = ~row_num, 
+        data = phone_ppred,
+        alpha = 0.1) |>
+  # overlay actual data
+  gf_dens(~phone_use,
+          data = phones,
+          inherit = FALSE,
+          color = 'darkorange',
+          linewidth = 1.5)
+```
+This looks like the posterior is way too wide and isn't as centered near the real data because the priors weren't as informative as they could've been.
+
+## N3
+
+### A.
+
+A quick websearch says that employees spend about 56 minutes on their phone during the 8 hour work day and that works out to about 140 seconds per 20 minutes. I think a standard deviation of 270 seconds is fair since it is about 2 and a half minutes per 20 minutes.
+
+
+### B.
+
+```{r}
+gamma_params(mean = 140, sd = 30)
+```
+
+$$\text{phone use} \sim \text{Gamma}(\alpha, \lambda)$$
+
+$$\alpha \sim  \text{Norm}(\text{mean}=22, \text{sd} = 2)$$
+
+$$\lambda \sim  \text{Gamma}(\text{mean}=.15, \text{sd} = 0.05)$$
+
+For alpha I did a norm prior of mean = 22 and sd = 2 because gamma_params put out 21.78 for a mean of 140 which would be my normal prior and for lambda I did mean = .15 with sd = 0.05 since gamma params put out a rate of .156 for a normal sd of 30.
+
+### B.
+
+```{r}
+model_descrip_g <- alist(
+  phone_use ~ dgamma(alpha, lambda),
+  alpha ~ dnorm(mean = .75, sd = .1),
+  lambda ~ dnorm(mean = .1, sd = .005)
+)
+
+quap_phone_model_g <- quap(flist = model_descrip_g, data = phones)
+```
+
+
+```{r}
+quap_phone_model_g <- quap(flist = model_descrip_g,
+                          data = phones)
+quap_phone_post_sample_g <- extract.samples(quap_phone_model_g, n = 1000)
+```
+
+```{r}
+gf_dens(~alpha, data = quap_phone_post_sample_g)
+gf_dens(~lambda, data = quap_phone_post_sample_g)
+```
+
+My priors were terrible so I corrected them to be shape ~ norm(mean = .75, sd = 1) and rate ~ norm(mean = 1, sd = 0.005)
+
+### D
+
+```{r}
+phone_ppred_g <- quap_phone_post_sample_g |>
+  # add row numbers to "label" each sampled combo of mu & sigma
+  mutate(row_num = c(1:n())) |>
+  # work one row (one mu, sigma combination) at a time
+  rowwise() |>
+  # simulate a dataset for each row (= each mu, sigma combo)  
+  mutate(ppred = list(rgamma(nrow(phones), 
+                            shape = alpha,
+                            rate = lambda))) |>
+  # keep only the row-ids and the simulated data
+  select(row_num, ppred) 
+```
+
+```{r}
+phone_ppred_g <- phone_ppred_g |>
+  unnest(cols = ppred)
+```
+
+```{r}
+gf_dens(~ppred, group = ~row_num, 
+        data = phone_ppred_g,
+        alpha = 0.1) |>
+  # overlay actual data
+  gf_dens(~phone_use,
+          data = phones,
+          inherit = FALSE,
+          color = 'darkorange',
+          linewidth = 1.5)
+```
+
+The Gamma model looks much better and the dark orange line and simulated data look very close together. For analyzing real data, this is much better than the normal model that was produced.

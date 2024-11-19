@@ -1,0 +1,175 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+```{r setup, include=FALSE}
+library(tidyverse)
+library(ggformula)
+theme_set(theme_minimal(base_size = 14))
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Recreating SR  Figure 2.5
+
+What  if, instead of just 4 options for a "conjecture" about the proportion blood in the body, we considered a range of values from 0-1?
+
+Let's draw a  picture of how each new observation will update our posterior answer, if we begin thinking that *all* values between 0-1 are equally likely. (That's *not* a good or realistic prior, but we will use it this once for simplicity.)
+
+**The code below creates the desired figure for the "water  and land on the globe" example in SR Chapter 2.  You will need to  make changes to make it represent our "blood in the body" example!**
+
+Assume B is blood (a "success" at getting the thing we're trying to measure the probability of), and F is not-blood, and we got the data: 
+
+**F B F F B F F F B**
+
+###  Create  a data table (`tibble`) containing the observed data
+
+```{r}
+# in SR, w is water  and l is land, and w is "success"
+blood_data <- tibble(obs = c("F", "B", "F", "F", "B", "F", "F", "F", "B"))
+```
+
+### Add variables recording the number of datapoints and total "successes" so far
+
+```{r}
+blood_data  <- blood_data |>
+  # mutate() adds a new variable to a dataset
+  mutate(n_trials = c(1:9),
+         # cumsum() computes the cumulative sum of a vector
+         # == tests whether the left and right-hand objects are equal and returns 0 for no, 1 for yes
+         n_success = cumsum(obs == 'B'))
+```
+
+###  Calculations to prepare for plotting
+
+```{r}
+sequence_length <- 50
+
+blood_data <- blood_data |> 
+  expand(nesting(n_trials, obs, n_success), 
+         # don't forget to  change variable names to match our problem!
+         p_blood = seq(from = 0, to = 1, length.out = sequence_length)) 
+
+# pause here and see what your data table now looks like
+glimpse(blood_data)
+```
+
+```{r}
+blood_data <- blood_data  |> 
+  group_by(p_blood) |> 
+ # you can learn more about lagging here: https://www.rdocumentation.org/packages/stats/versions/3.5.1/topics/lag or here: https://dplyr.tidyverse.org/reference/lead-lag.html
+  mutate(lagged_n_trials  = lag(n_trials, k = 1),
+         lagged_n_success = lag(n_success, k = 1)) |> 
+  ungroup() |> 
+  mutate(prior      = ifelse(n_trials == 1, 
+                             # if it's the first trial then:
+                             .5,
+                             # otherwise on later trials the prior will be:
+                             dbinom(x    = lagged_n_success, 
+                                    size = lagged_n_trials, 
+                                    prob = p_blood)),
+         likelihood = dbinom(x    = n_success, 
+                             size = n_trials, 
+                             prob = p_blood),
+         #  "strip" is going to be used to make a title for  the graph panel
+         strip      = str_c("n = ", n_trials)) |> 
+  # the next three lines allow us to normalize the prior and the likelihood, 
+  # ensuring the sum over all probabilities is 1 for both of them
+  group_by(n_trials) |> 
+  mutate(prior      = prior / sum(prior),
+         likelihood = likelihood / sum(likelihood))  
+```
+
+###  Make the plot!
+
+```{r}
+gf_line(likelihood ~ p_blood,
+        data  = blood_data) |>
+  gf_line(prior ~ p_blood,
+          data = blood_data,
+          linetype = 'dashed') |>
+  gf_facet_wrap(~ strip,
+                scales = "free_y")
+```
+
+
+### Questions
+
+1. What is the `sequence_length` controlling? What happens to the graph if you make it too small? (Too big?) 
+`sequence_length`controls the scaling factor. The `sequence length` cannot be greater than 1 and the smaller it is, the less information it gives. 
+
+2. What is the dotted line in each panel?
+The dotted line is the prior given the probability of blood.
+
+3. What is the solid line in  each panel?
+The likelihood of blood.
+
+# Grid Approximation
+
+###  What about the Posterior?
+
+The example above gives insight into how each added data-point *updates* our knowledge, but it skims over exactly how we can compute the posterior for a given sample by multiplying the **prior $\times$ likelihood**, and how we could obtain the final posterior for our whole dataset.
+
+What we've done so far is a **grid approximation**, where we find the posterior for some finite set of possible values of $p$ that are evenly spaced over its possible values (here: 0-1).
+
+In class Wednesday we had *very* few values (just 6: 0/5, 1/5, 2/5, 3/5, 4/5, and 5/5).
+
+### Make the Calculations
+
+With the help of R, let's try a finer grid to get a more precise answer...
+
+**Again, this code is for the SR book's "land and water" example. Make all changes needed to make it relevant to our "bloody" example!**
+
+```{r}
+blood_data2 <-
+  tibble(p_grid = seq(from = 0, to = 1, length.out = 30),      # define grid
+         prior  = 1) |>                                       # define prior
+  mutate(likelihood = dbinom(3, size = 3000, prob = p_grid)) |>  # compute likelihood at each value in grid
+  mutate(unstd_posterior = likelihood * prior) |>             # compute product of likelihood and prior
+  mutate(posterior = unstd_posterior / sum(unstd_posterior))   # standardize the posterior, so it sums to 1
+
+
+# to peek at the results table
+glimpse(blood_data2)
+```
+
+We can draw our plot with less code if, instead of having the prior, likelihood, and posterior densities in different columns, we stack them on top of each other and add a new column to label whether each case is from the prior, posterior, or likelihood:
+
+```{r}
+blood_data2 <- blood_data2 |>
+  # remove the unstandardized posterior (don't need it anymore)
+  select(-unstd_posterior) |>
+  pivot_longer(prior:posterior)
+
+glimpse(blood_data2)
+```
+
+### Draw the plot
+
+```{r}
+gf_line(value ~ p_grid,
+        color = ~ name,
+        data =  blood_data2) |>
+  gf_point() |>
+  gf_facet_wrap(~name,
+                scales = "free_y")
+```
+
+###  Questions
+
+1. What happens if you make the number of conjectured values of $p$ (the fine-ness of the grid) smaller, or larger? Re-run your code a few times to see what happens with very different grid resolutions.
+The smallest value of $p$ is 3 which guarantees a success or failure and thus the graph doesn't tell us anything. If $p$ is made larger, the points almost fom a smooth line of all the points to the fitted curve.
+
+2. (*relies on previous R experience*) What if you use a different prior - how do results change?
+The posteror and likelihood appear the same but the prior graph changes to whatever the entry is.
+
+3. (*advanced/tricky*) Why are the posterior, the prior and the likelihood in our plot different heights? Why doesn't that bother Prof DR a lot?
+Different scaling factors would give different heights for the plots. This doesnt bother Prof DR a lot because we aren't worrying about the scaling factors right now.
+
+4. What happens if you use a smaller dataset (just the initial observations instead of all of them)? A larger one?
+A smaller dataset provides an exponential curve to 1 (using the sample size of 3). A larger dataset (3000) has a massive spike at the peak and the rest of the points are at 0.
+
+###  What's next?
+The grid approach is simple, but really limited: the grid resolution you'd need to get  the precision you want in your posterior estimate might crash your computer, for one thing. (Another way of putting it is that grid search is slow and inefficient.) We will learn more efficient ways, soon!
+
+*Note: thanks to <https://bookdown.org/content/4857/> for base for the code used here.*

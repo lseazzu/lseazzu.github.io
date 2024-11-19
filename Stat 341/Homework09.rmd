@@ -1,0 +1,236 @@
+---
+title: "Stat 341 -- Homework 09"
+author: "Luca Seazzu"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: 
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r, setup, include = FALSE, message=FALSE}
+# load packages that are going to be used
+library(mosaic)      # this loads ggformula (for plotting), etc. too
+library(fastR2)      # some data sets
+library(pander)      # nicely formatted tables with pander()
+library(knitr)       # so you can use kable() for tables
+library(patchwork)   # for combining plots
+
+# data wrangling
+library(tidyverse)
+
+# several packages for bayesian stuff -- more may come later
+library(rethinking)  # related to text
+library(tidybayes)    
+library(bayesplot)
+library(CalvinBayes)
+
+
+# Some customization. You can alter or delete as desired (if you know what you are doing).
+
+theme_set(theme_bw())     # change theme for ggplot2/ggformula
+
+knitr::opts_chunk$set(
+  tidy = FALSE,     # display code as typed (rather than reformatted)
+  fig.width = 4,    # adjust this to make figures wider or narrower
+  fig.height = 2.5, # adjust this to make figures taller or shorrter
+  size = "small")   # slightly smaller font for code
+```
+
+
+<!-- A few math abbreviations -->
+
+\newcommand{\Prob}{\operatorname{Pr}}
+\newcommand{\Binom}{\operatorname{Binom}}
+\newcommand{\Unif}{\operatorname{Unif}}
+\newcommand{\Triangle}{\operatorname{Triangle}}
+\newcommand{\Norm}{\operatorname{Norm}}
+\newcommand{\Beta}{\operatorname{Beta}}
+\newcommand{\E}{\operatorname{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\SD}{\operatorname{SD}}
+
+<!-- Put your work below here.  Put text in text chunks, code in R chunks. -->
+
+```{r}
+set.seed(12)
+HAI <- read_csv('https://sldr.netlify.app/data/HAI-hospital-performance.csv',
+                 show_col_types = FALSE,
+                na = c('', ' ', 'NA', "NaN", "Not Available")) |>
+  mutate(Recommend = as.numeric(scale(H_RECMND_LINEAR_SCORE)), # (1)
+         Clean_Star_Rating = as.numeric(scale(H_CLEAN_STAR_RATING)), # (2)
+         MRSA_SIR = HAI_5_SIR, # just renaming to an easier to remember value
+         MRSA_SIR = ifelse(MRSA_SIR == 0, 0.001, MRSA_SIR), # EC3
+         State_Num = as.numeric(factor(State)), # (3)
+         County_Num = as.numeric(factor(paste0(State,County)))
+         ) |>
+  select(Facility, State, State_Num, County, County_Num, MRSA_SIR, Recommend, Clean_Star_Rating) 
+```
+
+```{r}
+HAI_1 <- HAI |>
+  select(MRSA_SIR, Recommend, Clean_Star_Rating, State, State_Num) |>
+  drop_na() # (4)
+
+HAI_1c <- compose_data(HAI_1)
+```
+
+```{r}
+HAI_2 <- HAI |> 
+  select(MRSA_SIR, Recommend, Clean_Star_Rating, State, State_Num) |>
+  drop_na(MRSA_SIR, State, State_Num) 
+
+Clean_Star_missidx <- HAI_2 |>
+  mutate(rownum = row_number()) |>
+  filter(is.na(Clean_Star_Rating)) |>
+  pull(rownum)
+  
+Recommend_missidx <- HAI_2 |>
+  mutate(rownum = row_number()) |>
+  filter(is.na(Recommend)) |>
+  pull(rownum)
+
+HAI_2 <- HAI_2 |>
+  mutate(Clean_Star_Rating = replace_na(Clean_Star_Rating, Inf),
+         Recommend = replace_na(Recommend, Inf))
+
+HAI_2c <- compose_data(Clean_Star_missidx = Clean_Star_missidx, 
+                       Recommend_missidx = Recommend_missidx,
+                       HAI_2)
+```
+
+```{r}
+HAI_3 <- HAI |>
+  select(MRSA_SIR, Recommend, Clean_Star_Rating, State, State_Num, County, County_Num) |>
+  drop_na() |>
+  mutate(County_Num = as.numeric(factor(County_Num)))
+
+County_Data <- HAI_3 |> # (5) This whole small block creating County_Data
+  group_by(County_Num) |>
+  summarise(County_Num = first(County_Num)) |>
+  ungroup()
+
+HAI_3c <- compose_data(County_Data = County_Data, HAI_3) # EC2
+```
+
+```{r}
+HAI_4 <- HAI_1
+
+HAI_4c <- HAI_1c
+```
+
+
+```{r warning=FALSE}
+# eval = FALSE
+fitted_model_1 <- stan(file = 'hw9_model1.stan',
+                       data = HAI_1c,
+                       chains = 2,
+                       iter = 2000,
+                       refresh = 0)
+```
+
+```{r warning=FALSE}
+# eval = FALSE
+fitted_model_2 <- stan(file = 'hw9_model2.stan',
+                       data = HAI_2c,
+                       chains = 2,
+                       iter = 2000,
+                       refresh = 0)
+```
+
+```{r warning=FALSE}
+# eval = FALSE
+fitted_model_3 <- stan(file = 'hw9_model3.stan',
+                       data = HAI_3c,
+                       chains = 2,
+                       iter = 2000,
+                       refresh = 0)
+```
+
+```{r warning=FALSE}
+# eval = FALSE
+fitted_model_4 <- stan(file = 'hw9_model4.stan',
+                       data = HAI_4c,
+                       chains = 2,
+                       iter = 2000,
+                       refresh = 0)
+```
+
+### 1.
+
+(#1) Scaling, changing to numeric, renaming the variable H_RECMND_LINEAR_SCORE to Recommend so it is centered at 0, ranges from about -3 to 3 and is easier to choose priors and interpret.
+
+(#2) Scaling, changing to numeric, renaming the variable H_CLEAN_STAR_RATING to Clean_Star_Rating so it is centered at 0, ranges from about -3 to 3 and is easier to choose priors and interpret.
+
+(#3) Classifying State as factor as numeric so assigning unique numeric values to a categorical variable of state.
+
+(#4) Drops rows containing NA but only in these columns, MRSA_SIR, Recommend, Clean_Star_Rating, State, State_Num
+
+(#5) This is grouping each country together and giving each country all of its data and then ungrouping it so that there are still multiple values for a country and not grouped onto one.
+
+### 2. Matching
+
+A Normal regression model - Model 4, "MRSA_SIR ~ normal(mu, sigma)" only one with a normal model
+
+A Gamma regression model -  Model 1, " MRSA_SIR ~ gamma(alpha, lambda)" means gamma and doesn't have the hierarchical variable
+
+A hierarchical Gamma regression model - Model 3, "sigma_County ~ lognormal(0,1)" hierarchical variable in this one and not the one above
+
+A Gamma regression model with imputation of missing values - None
+
+A hierarchical Gamma regression model with imputation of missing values - Model 2, "  mu_Clean_Star ~ normal(0, 1);
+  mu_Recommend ~ normal(0, 1);
+  sigma_Clean_Star ~ lognormal(0,1);
+  sigma_Recommend ~ lognormal(0,1);
+  Clean_Star_merge ~ normal(mu_Clean_Star, sigma_Clean_Star);
+  Recommend_merge ~ normal(mu_Recommend, sigma_Recommend);"
+  
+  This code shows the hierarchical variables and other code shows it dealing with the imputation of missing values all over the place.
+
+
+### 3. Model Comparison?
+
+Don't need model selection to make the choice, should've done it at the beginning.
+
+Different datasets have different predictors, missing values removed, missing values imputed, leads to different amount of rows, likelihoods of those datasets given the model depend on the rows in the dataset. Can't compare without the same start dataset, same amount of rows.
+
+
+### 4. A Prior
+
+These are the priors for model1. Formula: mu[i] = exp(b0 + b1 * Recommend[i] + b2 * Clean_Star_Rating[i] + b3[State_Num[i]])
+  b0 ~ normal(0, 1);
+  b1 ~ cauchy(0, 2.5);
+  b2 ~ cauchy(0, 2.5);
+  b3 ~ cauchy(0, 0.5);
+  sigma ~ lognormal(0,1);
+
+b0 seems like a safe intercept, both b1 and b2 are slops of standardized data so I think the sd could be lowered to about 1 or 1.5. b3 seems like a good prior for State_Num given they're a categorical variable given numeric values.
+
+### 5. Interpretation
+
+```{r}
+fitted_model_1
+fitted_model_2
+fitted_model_3
+fitted_model_4
+```
+
+-0.12
+-0.13
+-0.09
+-0.02 are the b2 posteriors which are related to Clean_Star_Rating
+
+They are essentially the same except for the normal distribution model. So that may be why it is different and doesn't have as much of an effect? Not entirely sure. I'd be inclined that around -0.09 to -0.13 is more correct than -0.02 since 3 different gamma models have it but I am not sure.
+
+
+### EC1
+
+A few hours... more than that because I picked it up and put it down a few times so loading the stan models took forever even with only 2 chains and using 2 cpu cores and double the memory. The most fun was the matching exercise because it felt like a puzzle but having to justify stuff was annoying and the code comments were fun to identify. Interpretation was the worst because of just loading stan.
+
+### EC2
+
+Do we need to put Compose_Data = Compose_Data first because it is something that will be iterated n times and if it isn't specifed then stan will just us n and not also Compose_Data
+
+### EC3
+
+(#EC3) Classifying MRSA_SIR to be nonzero and to be 0.001 if it is 0 or just return its value if it isn't 0. This is needed so the values aren't just 0 and don't mean anything/break stan

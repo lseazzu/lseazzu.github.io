@@ -1,0 +1,192 @@
+---
+title: "Stat 344 -- PS04"
+author: "Luca Seazzu"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: 
+  pdf_document:
+    fig_height: 2.2
+    fig_width: 4
+  html_document:
+    fig_height: 2.2
+    fig_width: 4
+  word_document:
+    fig_height: 2.2
+    fig_width: 4
+---
+
+```{r, setup, include = FALSE}
+# load packages that are going to be used
+require(fastR2)   # this loads mosaic, ggformula, etc. too
+library(tidyverse)
+library(mosaic)
+library(maxLik)
+library(ggplot2)
+
+# Some customization.  You can alter or delete as desired (if you know what you are doing).
+
+theme_set(theme_bw())     # change theme for ggplot2/ggformula
+
+knitr::opts_chunk$set(
+  tidy = FALSE,     # display code as typed (rather than reformatted)
+  size = "small")   # slightly smaller font for code
+```
+
+
+<!-- Some macros to make mathematics easier -->
+
+\newcommand{\Prob}{\mathrm{P}}
+\newcommand{\intersect}{\;\cap\;}
+\newcommand{\union}{\operatorname{\cup}}
+\newcommand{\E}{\operatorname{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\SD}{\operatorname{SD}}
+
+<!-- Put your work below here.  Put text in text chunks, code in R chunks. -->
+
+### Problem 5.18
+
+```{r}
+x <- 35
+n <- 55
+
+LL <- function(LO, x, n){
+  odds <- exp(LO)
+  pi <- odds / (1 + odds)
+  x * log(pi) + (n-x) * log(1-pi)
+}
+
+maxLik(LL, start = 0.5, x = x, n = n)
+```
+```{r}
+LO.hat <- 0.5596158 
+
+SE <- sqrt(LO.hat * (1-LO.hat) / n)
+
+LO.hat + c(-1, 1) * qnorm(0.975) * SE
+```
+
+Wald Interval is from 0.4284177 to 0.6908139
+
+```{r}
+pval_minus_critical <- function(LO.0) {
+  2 * (LL(LO.hat, x, n) - LL(LO.0, x, n)) - qchisq(.95, df = 1)
+}
+
+lo <- uniroot(pval_minus_critical, c(-100, LO.hat)) |> value()
+hi <- uniroot(pval_minus_critical, c(LO.hat, 100)) |> value()
+c(lo,hi)
+```
+  
+Likelihood Confidence Interval from 0.02050246 to 1.12635375.  
+  
+### Problem 5.48
+
+a. 
+
+For large values of T we would reject the null hypothesis because the more the value gets away from 1, the less like a Poisson distribution it would look like. Not too sure about really small values since that would mean a really small sample mean with a really high sample variance. 
+
+b.
+```{r}
+x <- c(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 2 ,4)
+
+m <- mean(x)
+s <- var(x)
+n <- length(x)
+T <- (n-1) * s/m
+
+p <- 1- pchisq(T, (n-1))
+p
+```
+A p-value of 0.029 would reject the null hypothesis that the distribution is Poisson so this would suggest x is not a Poisson distribution.
+
+
+c.
+```{r}
+T <- function(x){
+  m <- mean(x)
+  s <- var(x)
+  n <- length(x)
+  T <- (n-1) * s/m
+}
+
+sim <- do(10000) * T(rpois(150, lambda = 1))
+gf_dhistogram( ~T, data = sim) |>
+  gf_dist(dist = 'chisq', df = 149)
+
+```
+
+Simulating data with a larger sample size shows the quality of the chi-squared approximation and that the larger the sample size, the better the results.
+
+### Non-book Problems
+
+```{r}
+gapminder <- read.csv('https://sldr.netlify.com/data/gapminder_clean.csv') |>
+  na.omit()
+```
+
+
+1.
+
+```{r}
+LL2 <- function(lambda, x, n) {
+  {if (lambda < 0) return(NA)}
+  sum(dexp(x, rate = lambda, log = TRUE))
+}
+```
+
+```{r}
+maxLik(LL2, start = .5, x = gapminder$income)
+```
+
+MLE = 0.0001646964  
+
+2.
+
+```{r}
+lambda.hat <- 0.0001646964   
+n2 <- length(gapminder$income)
+
+
+SE <- lambda.hat / sqrt(n2)
+
+lambda.hat + c(-1, 1) * qnorm(0.975) * SE
+```
+Wald interval is from 0.0001595551  to 0.0001698377
+
+```{r}
+pval_minus_critical2 <- function(lambda0) {
+  2 * (LL2(lambda.hat, x, n) - LL2(lambda0, x, n)) - qchisq(.95, df = 1)
+}
+
+lo2 <- uniroot(pval_minus_critical2, c(0, lambda.hat)) |> value()
+hi2 <- uniroot(pval_minus_critical2, c(lambda.hat, 100)) |> value()
+## Question
+c(lo2,hi2)
+```
+Likelihood-ratio confidence interval is from .0001646964 to 14.38
+
+3.
+
+```{#r}
+llgamma <- function(alpha, var, x){
+  if (alpha < 0) return(NA)
+  if (var < 0) return(NA)
+  log(dgamma(x, shape = alpha, scale = var))
+}
+
+log_cost <- log(gapminder$income)
+
+ll_alternate <- maxLik(logLik = llgamma,
+  start = c(0.1, 1),
+  x = log_cost)
+
+
+logLik(ll_alternate) |> as.numeric()
+
+
+```
+
+
+Couldn't quite figure problem #3....
+
+

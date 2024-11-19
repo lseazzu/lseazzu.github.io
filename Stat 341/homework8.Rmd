@@ -1,0 +1,200 @@
+---
+title: "Stat 341 -- Homework 8"
+author: "Luca Seazzu"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: 
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r, setup, include = FALSE, message=FALSE}
+# load packages that are going to be used
+library(mosaic)      # this loads ggformula (for plotting), etc. too
+library(fastR2)      # some data sets
+library(pander)      # nicely formatted tables with pander()
+library(knitr)       # so you can use kable() for tables
+library(patchwork)   # for combining plots
+
+# data wrangling
+library(tidyverse)
+
+# several packages for bayesian stuff -- more may come later
+library(rethinking)  # related to text
+library(tidybayes)    
+library(bayesplot)
+library(CalvinBayes)
+
+
+# Some customization. You can alter or delete as desired (if you know what you are doing).
+
+theme_set(theme_bw())     # change theme for ggplot2/ggformula
+
+knitr::opts_chunk$set(
+  tidy = FALSE,     # display code as typed (rather than reformatted)
+  fig.width = 4,    # adjust this to make figures wider or narrower
+  fig.height = 2.5, # adjust this to make figures taller or shorrter
+  size = "small")   # slightly smaller font for code
+```
+
+
+<!-- A few math abbreviations -->
+
+\newcommand{\Prob}{\operatorname{Pr}}
+\newcommand{\Binom}{\operatorname{Binom}}
+\newcommand{\Unif}{\operatorname{Unif}}
+\newcommand{\Triangle}{\operatorname{Triangle}}
+\newcommand{\Norm}{\operatorname{Norm}}
+\newcommand{\Beta}{\operatorname{Beta}}
+\newcommand{\E}{\operatorname{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\SD}{\operatorname{SD}}
+
+<!-- Put your work below here.  Put text in text chunks, code in R chunks. -->
+
+## 9E4
+Explain the difference between the effective number of samples, n_eff as calculated by stan, and the actual number of samples.
+
+"The effective number of samples is an estimate of the number of independent samples from the posterior distribution, in terms of estimating
+some function like the posterior mean. (287)" n_eff is the length of a markov chain with no autocorrelationn whereas the actual number of camples are typically autocorrelated.
+
+## 9E5
+Which value should Rhat approach, when a chain is sampling the posterior distribution correctly?
+
+Rhat should approach 1 when the chain is sampling the posterior distribution correctly.
+
+## 9E6
+Second PDF with drawing.
+
+## 9E7
+Second PDF with drawing.
+
+## 9M3
+
+```{r}
+bugs <- read_csv('https://sldr.netlify.app/data/house_bugs.csv') |>
+  na.omit() |>
+  mutate(arthropod_div = arthropod.div) |>
+  mutate(income_avg_z = income.avg.z) |>
+  mutate(sqft_z = sqft.z) |>
+  mutate(total_value_z = total.value.z)
+```
+
+```{r}
+stan_data <- compose_data(bugs)
+
+stan_program <- '
+data {
+// number of observations
+int<lower=1> n;
+// response
+vector[n] arthropod_div;
+// predictor
+vector[n] income_avg_z;
+// predictor
+vector[n] sqft_z;
+// predictor
+vector[n] total_value_z;
+}
+parameters {
+// std of response, single continuous value
+real<lower=0> sigma;
+real a;
+real b;
+real c;
+real d;
+}
+model {
+// vector of n values: expected arthropod.div for each observation
+vector[n] mu;
+// loop over the n cases in the dataset to estimate mu_i values
+for (i in 1:n) {
+mu[i] = a + (b*income_avg_z[i]) + (c*total_value_z[i]) + (d*sqft_z[i]);
+}
+// prior for both intercepts
+a ~ normal(20, 10);
+// prior for both slopes
+b ~ normal(25, 5);
+c ~ normal(25, 5);
+d ~ normal(10, 10);
+// prior for sigma
+sigma ~ normal(20, 5);
+// defining likelihood in terms of mus and sigma
+arthropod_div ~ normal(mu, sigma);
+}
+'
+```
+
+```{r, message=FALSE, results='hide'}
+rugged_model <- stan(model_code = stan_program,
+                      data = stan_data,
+                      warmup = 100,
+                      chains = 4,
+                      control = list(adapt_delta = 0.8))
+```
+
+```{r, message=FALSE, results='hide'}
+rugged_model2 <- stan(model_code = stan_program,
+                      data = stan_data,
+                      warmup = 250,
+                      chains = 4,
+                      control = list(adapt_delta = 0.8))
+```
+
+```{r, message=FALSE, results='hide'}
+rugged_model3 <- stan(model_code = stan_program,
+                      data = stan_data,
+                      warmup = 500,
+                      chains = 4,
+                      control = list(adapt_delta = 0.8))
+```
+
+```{r, message=FALSE, results='hide'}
+rugged_model4 <- stan(model_code = stan_program,
+                      data = stan_data,
+                      warmup = 750,
+                      chains = 4,
+                      control = list(adapt_delta = 0.8))
+
+```
+
+```{r}
+rugged_model
+rugged_model2
+rugged_model3
+rugged_model4
+```
+
+Rugged_model - warmup = 100
+sigma n_eff = 2940
+a n_eff = 2291
+b n_eff = 2291
+c n_eff = 1281
+d n_eff = 1193
+lp__ n_eff = 1291
+
+Rugged_model2 - warmup = 250
+sigma n_eff = 2729
+a n_eff = 2703
+b n_eff = 2981
+c n_eff = 2430
+d n_eff = 2301
+lp__ n_eff = 1266
+
+Rugged_model3 - warmup = 500
+sigma n_eff = 1583
+a n_eff = 2282
+b n_eff = 2168
+c n_eff = 1610
+d n_eff = 1343
+lp__ n_eff = 846
+
+Rugged_model4 - warmup = 750
+sigma n_eff = 723
+a n_eff = 1055
+b n_eff = 827
+c n_eff = 748
+d n_eff = 757
+lp__ n_eff = 465
+
+It appears that 250 warmup got the most n_eff and also had rhat = 1 so about 25% of the total samples as warmup seems to be enough.
