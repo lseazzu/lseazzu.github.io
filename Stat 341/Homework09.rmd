@@ -3,8 +3,8 @@ title: "Stat 341 -- Homework 09"
 author: "Luca Seazzu"
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output: 
-  pdf_document: default
   html_document: default
+  pdf_document: default
   word_document: default
 ---
 
@@ -23,7 +23,7 @@ library(tidyverse)
 library(rethinking)  # related to text
 library(tidybayes)    
 library(bayesplot)
-library(CalvinBayes)
+#library(CalvinBayes)
 
 
 # Some customization. You can alter or delete as desired (if you know what you are doing).
@@ -54,7 +54,7 @@ knitr::opts_chunk$set(
 
 ```{r}
 set.seed(12)
-HAI <- read_csv('https://sldr.netlify.app/data/HAI-hospital-performance.csv',
+HAI <- read_csv('HAI-hospital-performance.csv',
                  show_col_types = FALSE,
                 na = c('', ' ', 'NA', "NaN", "Not Available")) |>
   mutate(Recommend = as.numeric(scale(H_RECMND_LINEAR_SCORE)), # (1)
